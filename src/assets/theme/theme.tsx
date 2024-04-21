@@ -1,5 +1,5 @@
 /* eslint-disable no-empty-pattern */
-import { TreeItem, treeItemClasses, TreeItemProps } from "@mui/lab";
+import { TreeItem, timelineItemClasses, TreeItemProps } from "@mui/lab";
 import {
   alpha,
   Autocomplete,
@@ -22,7 +22,7 @@ import "../theme/constants.scss";
 import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { CustomButton } from "../../components/Shared";
-import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
+// import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 const primaryFontSize = 14;
 export const PrimaryTheme = createTheme({
   palette: {
@@ -301,53 +301,53 @@ export const StyledAutocomplete = styled(Autocomplete)(() => ({
   },
 }));
 
-export const StyledTimePickerInput = styled(MobileTimePicker)(() => ({
-  "& .MuiInputBase-root": {
-    color: "white",
-    backgroundColor: "#5CAD77",
-    "&:hover": {
-      backgroundColor: "#5CAD77",
-    },
-    "&.Mui-focused": {
-      backgroundColor: "#5CAD77",
-    },
-  },
-  "& .MuiInputLabel-root": {
-    color: "white",
-  },
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: "white",
-  },
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: "#5CAD77",
-    },
-    "&:hover fieldset": {
-      borderColor: "##5CAD77",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "white",
-    },
-    "&.Mui-error fieldset": {
-      borderColor: "red",
-    },
-    "& input::placeholder": {
-      color: "white",
-    },
-  },
-  "& .MuiOutlinedInput-notchedOutline": {
-    borderColor: "#5CAD77",
-    "&.Mui-error": {
-      borderColor: "red",
-    },
-  },
-  "& .MuiSvgIcon-root": {
-    color: "#5CAD77",
-    "&.Mui-error": {
-      color: "red",
-    },
-  },
-}));
+// export const StyledTimePickerInput = styled(MobileTimePicker)(() => ({
+//   "& .MuiInputBase-root": {
+//     color: "white",
+//     backgroundColor: "#5CAD77",
+//     "&:hover": {
+//       backgroundColor: "#5CAD77",
+//     },
+//     "&.Mui-focused": {
+//       backgroundColor: "#5CAD77",
+//     },
+//   },
+//   "& .MuiInputLabel-root": {
+//     color: "white",
+//   },
+//   "& .MuiInputLabel-root.Mui-focused": {
+//     color: "white",
+//   },
+//   "& .MuiOutlinedInput-root": {
+//     "& fieldset": {
+//       borderColor: "#5CAD77",
+//     },
+//     "&:hover fieldset": {
+//       borderColor: "##5CAD77",
+//     },
+//     "&.Mui-focused fieldset": {
+//       borderColor: "white",
+//     },
+//     "&.Mui-error fieldset": {
+//       borderColor: "red",
+//     },
+//     "& input::placeholder": {
+//       color: "white",
+//     },
+//   },
+//   "& .MuiOutlinedInput-notchedOutline": {
+//     borderColor: "#5CAD77",
+//     "&.Mui-error": {
+//       borderColor: "red",
+//     },
+//   },
+//   "& .MuiSvgIcon-root": {
+//     color: "#5CAD77",
+//     "&.Mui-error": {
+//       color: "red",
+//     },
+//   },
+// }));
 
 export const StyledSwitch = styled(Switch)(({ theme }) => ({
   padding: 8,
@@ -385,26 +385,26 @@ export const StyledSwitch = styled(Switch)(({ theme }) => ({
 }));
 
 
-export const StyledTreeItem = styled((props: TreeItemProps) => (
-  // eslint-disable-next-line react/react-in-jsx-scope
-  <TreeItem {...props} />
-))(({ theme }) => ({
-  [`& .${treeItemClasses.iconContainer}`]: {
-    "& .close": {
-      opacity: 0.3,
-    },
-  },
-  [`& .${treeItemClasses.group}`]: {
-    marginLeft: 15,
-    paddingLeft: 18,
-    borderLeft: `1px dashed ${alpha(theme.palette.text.primary, 0.4)}`,
-  },
-  [`& .${treeItemClasses.content}`]: {
-    "$expanded > &": {
-      fontWeight: theme.typography.fontWeightRegular,
-    },
-  },
-}));
+// export const StyledTreeItem = styled((props: TreeItemProps) => (
+//   // eslint-disable-next-line react/react-in-jsx-scope
+//   <TreeItem {...props} />
+// ))(({ theme }) => ({
+//   [`& .${treeItemClasses.iconContainer}`]: {
+//     "& .close": {
+//       opacity: 0.3,
+//     },
+//   },
+//   [`& .${treeItemClasses.group}`]: {
+//     marginLeft: 15,
+//     paddingLeft: 18,
+//     borderLeft: `1px dashed ${alpha(theme.palette.text.primary, 0.4)}`,
+//   },
+//   [`& .${treeItemClasses.content}`]: {
+//     "$expanded > &": {
+//       fontWeight: theme.typography.fontWeightRegular,
+//     },
+//   },
+// }));
 interface CustomDialogProps extends DialogProps {
   width?: string;
 }
