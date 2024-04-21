@@ -15,3 +15,29 @@ export const products = [
     { id: 11, name: 'Brownies', price: 'LKR200.00', imageUrl: productImage4, rating: 3.9  },
     { id: 12, name: 'Ginger Toffee', price: 'LKR120.00', imageUrl: productImage3, rating: 3.9 },
   ];
+
+  export const sampleShippingData = [
+    {
+      _id: "1",
+      fullName: "John Doe",
+      addressLine1: "123 Main St",
+      addressLine2: "",
+      city: "Anytown",
+      postalCode: "12345",
+      country: "Country",
+      phoneNumber: "123-456-7890",
+    },
+    {
+      _id: "2",
+      fullName: "Jane Smith",
+      addressLine1: "456 Elm St",
+      addressLine2: "Apt 101",
+      city: "Sometown",
+      postalCode: "54321",
+      country: "Another Country",
+      phoneNumber: "987-654-3210",
+    },
+    // Add more shipping data objects as needed
+  ];
+  
+  

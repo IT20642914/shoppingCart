@@ -20,10 +20,10 @@ export const PrimaryTheme = createTheme({
       disabled: "#6b6b6b",
     },
     primary: {
-      main: "#dd2126",
+      main: "#4a033d",
     },
     secondary: {
-      main: "#274D36",
+      main: "#ff8884",
     },
     success: {
       main: "#00C853",
@@ -35,8 +35,8 @@ export const PrimaryTheme = createTheme({
       main: "#FFB800",
     },
     background: {
-      default: "#FFF0F5",
-      paper: "#FFF0F5",
+      default: "#ff8884",
+      paper: "#ff8884",
     },
   },
   typography: {
@@ -98,11 +98,11 @@ export const StyledTableCell = styled(TableCell, {
 })(({ theme, width }) => ({
   [`&.${tableCellClasses.head}`]: {
     fontSize: 14,
-    backgroundColor: "#274D36",
+    backgroundColor: "#ff8884",
     color: theme.palette.common.white,
     padding: "15px",
     borderLeft: "1px solid",
-    borderColor: "#5CAD77",
+    borderColor: "#E75480",
     width: width || "auto",
   },
   [`&.${tableCellClasses.body}`]: {
@@ -137,9 +137,9 @@ export const StyledCheckBox = styled(Checkbox)(({ theme }) => ({
 
 export const StyledTextField = styled(TextField)(() => ({
   "& .MuiInputBase-root": {
-    backgroundColor: "#5CAD77",
+   // backgroundColor: "#5CAD77",
     color: "white",
-    borderColor: "#5CAD77",
+    //borderColor: "#5CAD77",
   },
   "& .MuiInputLabel-root": {
     color: "white",
@@ -154,15 +154,15 @@ export const StyledTextField = styled(TextField)(() => ({
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "#5CAD77",
+      borderColor: "white",//
       borderWidth: "1px",
     },
     "&:hover fieldset": {
-      borderColor: "#274D36",
+      borderColor: "#E75480",
     },
     "&.Mui-focused fieldset": {
       color: "white",
-      borderColor: "#274D36",
+      borderColor: "#E75480",
       borderWidth: "2px",
     },
     "& input::placeholder": {
