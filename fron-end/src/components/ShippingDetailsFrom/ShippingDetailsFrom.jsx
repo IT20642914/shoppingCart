@@ -4,7 +4,7 @@ import { StyledTextField } from '../../assets/theme/theme';
 import style from './ShippingDetailsFrom.module.scss';
 import { CustomButton } from '../Shared';
 const ShippingDetailsFrom = ({ shippingData, handleInputFocus, onInputHandleChange }) => {
-    const { fullName, addressLine1, addressLine2, city, postalCode, country, phoneNumber, helperText,cancelButtonTitle,confirmButtonTitle,onCallback } = shippingData;
+    const { fullName,email, addressLine1, addressLine2, city, postalCode, country, phoneNumber, helperText,cancelButtonTitle,confirmButtonTitle,onCallback } = shippingData;
   
     return (
         <section className={style.FormContainer}>
@@ -23,6 +23,22 @@ const ShippingDetailsFrom = ({ shippingData, handleInputFocus, onInputHandleChan
                     helperText={helperText && fullName.error}
                     onFocus={() => handleInputFocus('fullName', 'GI')}
                     onChange={(event) => onInputHandleChange('fullName', event.target.value)}
+                />
+            </Grid>
+             {/*email */}
+             <Grid item xs={12} md={12}>
+                <StyledTextField
+                    fullWidth
+                    label="Email"
+                    placeholder="Enter Email"
+                    size="small"
+                    value={email.value}
+                    error={!!email.error}
+                    disabled={email.disable}
+                    required={email.isRequired}
+                    helperText={helperText && email.error}
+                    onFocus={() => handleInputFocus('email', 'GI')}
+                    onChange={(event) => onInputHandleChange('email', event.target.value)}
                 />
             </Grid>
             {/* Address Line 1 */}
@@ -122,7 +138,7 @@ const ShippingDetailsFrom = ({ shippingData, handleInputFocus, onInputHandleChan
                 />
             </Grid>
             <Grid item xs={12} md={12}>
-            <CustomButton text={cancelButtonTitle ? cancelButtonTitle : 'Cancel'} border='1px solid #6e6e6e' bgColor='#4a033d' onClick={() => onCallback(false)} />
+            <CustomButton text={cancelButtonTitle ? cancelButtonTitle : 'Cancel'} border='1px solid #ffe4d9' bgColor='#ff8884' onClick={() => onCallback(false)} />
             <CustomButton text={confirmButtonTitle ? confirmButtonTitle : 'Confirm'} onClick={() => onCallback(true)}/>
             </Grid>
         </Grid>

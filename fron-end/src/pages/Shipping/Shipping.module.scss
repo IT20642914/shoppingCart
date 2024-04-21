@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 60vh;
+    height: 80vh;
 }
 
 .formWrapper {
@@ -10,5 +10,6 @@
     max-width: 83rem; /* Adjust the maximum width as needed */
 }
 .tabContent{
-    min-height: 27rem;
+    margin-top: 1rem;
+    min-height: 24rem;
 }

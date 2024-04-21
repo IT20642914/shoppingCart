@@ -98,19 +98,19 @@ export const StyledTableCell = styled(TableCell, {
 })(({ theme, width }) => ({
   [`&.${tableCellClasses.head}`]: {
     fontSize: 14,
-    backgroundColor: "#ff8884",
+    backgroundColor: "#a45a70",
     color: theme.palette.common.white,
     padding: "15px",
     borderLeft: "1px solid",
-    borderColor: "#E75480",
+    borderColor: "#a45a70",
     width: width || "auto",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
     padding: "15px",
     color: theme.palette.common.white,
-    backgroundColor: "#5CAD77",
-    borderBottom: "0.01px solid #bfbfbf !important",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    borderBottom: "0.01px solid #E75480 !important",
     width: width || "auto",
   },
   "&:last-child": {
@@ -183,12 +183,12 @@ export const StyledTextField = styled(TextField)(() => ({
 export const StyledAutocomplete = styled(Autocomplete)(() => ({
   "& .MuiInputBase-root": {
     color: "white",
-    backgroundColor: "#0c361c",
+    backgroundColor: "#ff8884",
     "&:hover": {
-      backgroundColor: "#0c361c",
+      backgroundColor: "#ff8884",
     },
     "&.Mui-focused": {
-      backgroundColor: "#0c361c",
+      backgroundColor: "#ff8884",
     },
   },
   "& .MuiInputLabel-root": {
@@ -199,7 +199,7 @@ export const StyledAutocomplete = styled(Autocomplete)(() => ({
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "#5CAD77",
+      borderColor: "#ff8884",
     },
     "&:hover fieldset": {
       borderColor: "white",
@@ -212,11 +212,11 @@ export const StyledAutocomplete = styled(Autocomplete)(() => ({
     },
   },
   "& .MuiAutocomplete-paper": {
-    backgroundColor: "#5CAD77",
+    backgroundColor: "#ff8884",
   },
   "& .MuiAutocomplete-popper": {
     "& .MuiPopper-root": {
-      backgroundColor: "#0c361c",
+      backgroundColor: "#ff8884 ",
     },
   },
   "& .MuiAutocomplete-popupIndicator": {
