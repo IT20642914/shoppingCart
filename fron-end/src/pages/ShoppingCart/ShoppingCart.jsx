@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import ShoppingCartStep from '../../components/ShoppingCartStep/ShoppingCartStep';
 import ShippingInfoStep from '../../components/ShippingInfoStep/ShippingInfoStep';
 import PaymentDetailsStep from '../../components/PaymentDetails/PaymentDetails';
-
+import Styles from './ShoppingCart.module.scss';
 const steps = [
   { label: 'Shopping Cart', component: ShoppingCartStep },
   { label: 'Shipping Info', component: ShippingInfoStep },
@@ -53,6 +53,7 @@ const ShoppingCart = () => {
   };
 
   return (
+    <section className={Styles.Container}>
     <Box sx={{ width: '100%' }}>
       <Stepper nonLinear activeStep={activeStep}>
         {steps.map((step, index) => (
@@ -99,6 +100,7 @@ const ShoppingCart = () => {
         )}
       </div>
     </Box>
+    </section>
   );
 };
 
