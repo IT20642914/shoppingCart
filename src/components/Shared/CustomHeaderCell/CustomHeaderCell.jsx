@@ -1,13 +1,12 @@
-import { Box, Divider, IconButton, List, ListItem, ListItemText, Popover, tableCellClasses } from '@mui/material'
-import React, { useState } from 'react'
-import { StyledTableCell } from '../../../assets/theme/theme'
-import { HeaderCellProps } from '../../../utilities/models'
+import React, { useState } from 'react';
+import { Box, Divider, IconButton, List, ListItem, ListItemText, Popover, tableCellClasses } from '@mui/material';
+import { StyledTableCell } from '../../../assets/theme/theme';
 import SortByAlphaOutlinedIcon from '@mui/icons-material/SortByAlphaOutlined';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import { Calendar } from "react-multi-date-picker";
 import TimePicker from "react-multi-date-picker/plugins/analog_time_picker";
 
-const CustomHeaderCell: React.FC<HeaderCellProps> = ({
+const CustomHeaderCell = ({
   id,
   children,
   sortable,
@@ -18,11 +17,11 @@ const CustomHeaderCell: React.FC<HeaderCellProps> = ({
   width,
 }) => {
 
-  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleClickFilter = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClickFilter = (event) => {
     setAnchorEl(event.currentTarget);
-    setDateRange([])
+    setDateRange([]);
   };
 
   const handleCloseFilter = () => {
@@ -32,15 +31,15 @@ const CustomHeaderCell: React.FC<HeaderCellProps> = ({
   const openFilter = Boolean(anchorEl);
   const filterKeys = filtered && getFilterList && getFilterList(id);
 
-
   const [dateRange, setDateRange] = useState([]);
 
-  const handleDateChange = (value: any) => {
+  const handleDateChange = (value) => {
     setDateRange(value);
   };
+
   return (
     <StyledTableCell className={tableCellClasses.head} width={width}>
-      <Box sx={{ display: 'flex', alignItems: 'center' }} >
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
         {children}
         <Box sx={{ flexGrow: 1 }} />
         {sortable && (
@@ -83,7 +82,7 @@ const CustomHeaderCell: React.FC<HeaderCellProps> = ({
                   value={dateRange}
                   format="YYYY/MM/DD HH:mm"
                   className="bg-dark red"
-                  onChange={(value: any) => {
+                  onChange={(value) => {
                     if (value && onFilter) {
                       onFilter(id, value)
                       handleDateChange(value)
@@ -109,7 +108,7 @@ const CustomHeaderCell: React.FC<HeaderCellProps> = ({
                 sx={{ maxHeight: '420px' }}
               >
                 <List style={{ backgroundColor: '#323232', padding: '8px 10px' }}>
-                  {(filterKeys as [])?.map((key, index) => (
+                  {filterKeys?.map((key, index) => (
                     <React.Fragment key={index}>
                       <ListItem button onClick={() => {
                         if (onFilter) onFilter(id, key);
@@ -117,7 +116,7 @@ const CustomHeaderCell: React.FC<HeaderCellProps> = ({
                       }}>
                         <ListItemText primary={key} style={{ color: '#ffffff' }} />
                       </ListItem>
-                      {index !== (filterKeys as [])?.length - 1 && <Divider style={{ backgroundColor: '#ffffff' }} />}
+                      {index !== filterKeys?.length - 1 && <Divider style={{ backgroundColor: '#ffffff' }} />}
                     </React.Fragment>
                   ))}
                 </List>
@@ -129,7 +128,7 @@ const CustomHeaderCell: React.FC<HeaderCellProps> = ({
 
       </Box>
     </StyledTableCell>
-  )
+  );
 };
 
-export default CustomHeaderCell
+export default CustomHeaderCell;

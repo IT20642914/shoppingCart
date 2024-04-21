@@ -1,11 +1,7 @@
-import React from 'react'
-import style from './Stepper.module.scss'
+import React from 'react';
+import style from './Stepper.module.scss';
 
-const Stepper: React.FC<{
-    stepNumber: number;
-    stepTitle: string;
-    children: React.ReactNode;
-}> = (props) => {
+const Stepper = (props) => {
   return (
     <section key={props.stepNumber}>
       <section className={style.stepperHeader}>
@@ -19,7 +15,7 @@ const Stepper: React.FC<{
         </section>
       </section>
     </section>
-  )
+  );
 }
 
-export default Stepper
+export default Stepper;
