@@ -40,4 +40,41 @@ export const products = [
     // Add more shipping data objects as needed
   ];
   
+ export const cartItems = [
+    {
+      id: 'p1',
+      name: 'Wireless Mouse',
+      price: 19.99,
+      quantity: 2,
+      imageUrl: productImage3
+    },
+    {
+      id: 'p2',
+      name: 'Keyboard',
+      price: 49.99,
+      quantity: 1,
+      imageUrl: productImage2
+    },
+    {
+      id: 'p3',
+      name: 'HD Monitor',
+      price: 149.99,
+      quantity: 1,
+      imageUrl:productImage1
+    },
+    {
+      id: 'p4',
+      name: 'USB-C Charging Cable',
+      price: 14.99,
+      quantity: 3,
+      imageUrl: productImage2
+    },
+    {
+      id: 'p5',
+      name: 'Portable External Hard Drive',
+      price: 59.99,
+      quantity: 1,
+      imageUrl: productImage5
+    }
+  ];
   

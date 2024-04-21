@@ -10,15 +10,19 @@ import ShoppingCartStep from '../../components/ShoppingCartStep/ShoppingCartStep
 import ShippingInfoStep from '../../components/ShippingInfoStep/ShippingInfoStep';
 import PaymentDetailsStep from '../../components/PaymentDetails/PaymentDetails';
 import Styles from './ShoppingCart.module.scss';
-const steps = [
-  { label: 'Shopping Cart', component: ShoppingCartStep },
-  { label: 'Shipping Info', component: ShippingInfoStep },
-  { label: 'Payment Details', component: PaymentDetailsStep },
-];
+import {cartItems} from '../../utilities/index';
 
 const ShoppingCart = () => {
+
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
+  const [cartItemList, setCartItemsList] = React.useState(cartItems);
+  const steps = [
+    { label: 'Shopping Cart', component: ShoppingCartStep },
+    { label: 'Shipping Info', component: ShippingInfoStep },
+    { label: 'Payment Details', component: PaymentDetailsStep },
+  ];
+  
 
   const totalSteps = () => steps.length;
 
@@ -52,54 +56,29 @@ const ShoppingCart = () => {
     setCompleted({});
   };
 
+  const onUpdateCart = (itemId, quantity) => {
+    const updatedCartItems = cartItemList.filter(item => {
+      if (item.id === itemId) {
+        return quantity > 0; // Only include the item if the new quantity is greater than 0
+      }
+      return true; // Include all other items that were not updated
+    }).map(item => {
+      if (item.id === itemId) {
+        return { ...item, quantity }; // Update the quantity for the item being changed
+      }
+      return item; // Return all other items unchanged
+    });
+  
+    setCartItemsList(updatedCartItems); // Update the state with the new cart items list
+  };
+  
   return (
-    <section className={Styles.Container}>
-    <Box sx={{ width: '100%' }}>
-      <Stepper nonLinear activeStep={activeStep}>
-        {steps.map((step, index) => (
-          <Step key={step.label} completed={completed[index]}>
-            <StepButton color="inherit" onClick={handleStep(index)}>
-              {step.label}
-            </StepButton>
-          </Step>
-        ))}
-      </Stepper>
-      <div>
-        {allStepsCompleted() ? (
-          <>
-            <Typography sx={{ mt: 2, mb: 1 }}>
-              All steps completed - you&apos;re finished
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Button onClick={handleReset}>Reset</Button>
-            </Box>
-          </>
-        ) : (
-          <>
-            <Box sx={{ my: 2 }}>
-              {React.createElement(steps[activeStep].component)}
-            </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-              >
-                Back
-              </Button>
-              <Box sx={{ flex: '1 1 auto' }} />
-              {isLastStep() ? (
-                <Button onClick={handleNext}>Finish</Button>
-              ) : (
-                <Button onClick={handleNext}>
-                  Next
-                </Button>
-              )}
-            </Box>
-          </>
-        )}
-      </div>
-    </Box>
+  <section className={Styles.Container}>
+  <ShoppingCartStep
+  cartItemList={cartItemList}
+  onUpdateCart={onUpdateCart}
+  />
+
     </section>
   );
 };
