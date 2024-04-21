@@ -1,5 +1,6 @@
 const APP_ROUTES = {
-    ROOT: "/"
+    ROOT: "/",
+    SHIPPING_ADDRESS:"/shipping-address"
   };
   
   export { APP_ROUTES };

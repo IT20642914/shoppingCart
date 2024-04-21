@@ -5,7 +5,9 @@ body {
   margin: 0;
   font-family: $primaryFont;
   font-size: $primaryFontSize;
-  color: $white;
+  color: #313131;
+    background: linear-gradient(#ff8884, #ffe4d9);
+  
 }
 .custom-datepicker-input {
   color: white;

@@ -24,7 +24,7 @@ root.render(
       draggable
       pauseOnHover
       theme="dark" />
-       <ThemeProvider theme={PrimaryTheme}>
+    <ThemeProvider theme={PrimaryTheme}>
     <App />
     </ThemeProvider>
   </>

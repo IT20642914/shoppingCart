@@ -16,7 +16,7 @@ const primaryFontSize = 14;
 export const PrimaryTheme = createTheme({
   palette: {
     text: {
-      primary: "#000000",
+      primary: "#313131",
       disabled: "#6b6b6b",
     },
     primary: {
@@ -35,8 +35,8 @@ export const PrimaryTheme = createTheme({
       main: "#FFB800",
     },
     background: {
-      default: "#274D36",
-      paper: "rgba(25, 111, 61, 0.5)",
+      default: "#FFF0F5",
+      paper: "#FFF0F5",
     },
   },
   typography: {

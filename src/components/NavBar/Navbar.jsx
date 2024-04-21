@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,8 +12,9 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import logo from "./candyCloudLOGO.png";
+// import logo from "./candyCloudLOGO.png";
 import "./Navbar.css";
+import { APP_ROUTES } from "../../utilities";
 
 const navButtons = [
   {
@@ -33,11 +34,13 @@ const navButtons = [
     pages: ["/Leave"],
   },
 ];
-const settings = ["Profile", "Dashboard"];
+const settings = ["Profile", "Dashboard","Shipping Address"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+const navigate=useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -50,7 +53,10 @@ function ResponsiveAppBar() {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (event) => {
+    if(event==="Shipping Address"){
+      navigate(APP_ROUTES.SHIPPING_ADDRESS)
+    }
     setAnchorElUser(null);
   };
 
@@ -106,11 +112,11 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <img
+          {/* <img
             src={logo}
             sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
             className="logo"
-          />
+          /> */}
           <Typography
             variant="h5"
             noWrap
@@ -166,7 +172,7 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={()=>handleCloseUserMenu(setting)}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
