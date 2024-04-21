@@ -1,186 +1,170 @@
-import * as React from "react";
-import { Link, useNavigate } from "react-router-dom";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
+import React from 'react';
+import { useNavigate,useLocation } from 'react-router-dom';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Tooltip from '@mui/material/Tooltip';
+import Avatar from '@mui/material/Avatar';
+import InputBase from '@mui/material/InputBase';
+import SearchIcon from '@mui/icons-material/Search';
+import { styled, alpha } from '@mui/material/styles';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import {logo } from '../../assets/images';
+import {APP_ROUTES} from '../../utilities/routes.constants';
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-// import logo from "./candyCloudLOGO.png";
-import "./Navbar.css";
-import { APP_ROUTES } from "../../utilities";
+const settings = ["Profile","Shipping Address"];
 
-const navButtons = [
-  {
-    label: "Dashboard",
-    pages: ["/Dashboard"],
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  {
-    label: "Manage Employees",
-    pages: ["/Employee"],
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
   },
-  {
-    label: "Manage Leaves",
-    pages: ["/EmployeeLeave"],
-  },
-  {
-    label: "Leave Request",
-    pages: ["/Leave"],
-  },
-];
-const settings = ["Profile", "Dashboard","Shipping Address"];
+}));
 
-function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // Vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
+}));
+
+
+const ResponsiveAppBar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-const navigate=useNavigate();
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = (event) => {
-    if(event==="Shipping Address"){
-      navigate(APP_ROUTES.SHIPPING_ADDRESS)
-    }
+  const handleCloseUserMenu = (setting) => {
     setAnchorElUser(null);
+    if (setting === 'Shipping Address') {
+      navigate(APP_ROUTES.SHIPPING_ADDRESS);
+    }
+    // Add logic for 'Profile View' if needed
   };
+  const isRouteActive = (route) => {
+    return location.pathname === route;
+  };
+
+   // Define your pages using APP_ROUTES
+   const pages = [
+    { name: 'Home', route: APP_ROUTES.ROOT },
+    { name: 'Customer Support', route: APP_ROUTES.CUSTOMER_SUPPORT },
+    { name: 'About Us', route: APP_ROUTES.ABOUT_US }, // Add the rest of your routes here
+  ];  
 
   return (
-    <AppBar
-      position="static"
-      className="navBar"
-      sx={{ backgroundColor: "#c4c4c47b" }}
-    >
+    <AppBar position="static" sx={{ 
+        marginBottom: '20px',
+        background: 'transparent', 
+        boxShadow: '0 0 4px 0 rgba(0, 0, 0, 0.2)', // Added shadow
+        borderBottom: '1px solid rgba(255, 255, 255, 0.5)', // Added border
+      }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {navButtons.map(({ label, pages }) => (
-                <MenuItem key={label} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">
-                    {label}
-                    {pages.map((page, index) => (
-                      <Link key={index} to={page} className="nav-link">
-                        {index === 0 ? "" : ", "}
-                        {page}
-                      </Link>
-                    ))}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+          <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
+            {/* Logo */}
+            <img src={logo} alt="logo" style={{ width: '100px' }} />
+              {/* Search Box */}
+              <Search>
+                      <SearchIconWrapper>
+                        <SearchIcon />
+                      </SearchIconWrapper>
+                      <StyledInputBase
+                        placeholder="Search here…"
+                        inputProps={{ 'aria-label': 'search' }}
+                      />
+                    </Search>  
           </Box>
-          {/* <img
-            src={logo}
-            sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
-            className="logo"
-          /> */}
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            Candy Cloud
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {navButtons.map(({ label, pages }) => (
-              <Button
-                key={label}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+          <>
+              {/* Nav Items */}
+              {pages.map(({ name, route }) => (
+              <Typography
+                key={name}
+                variant="h6"
+                onClick={() => navigate(route)}
+                sx={{ 
+                  margin: '0 10px', 
+                  cursor: 'pointer', 
+                  fontWeight: isRouteActive(route) ? 700 : 400, // Bold for active route
+                  color: isRouteActive(route) ? 'secondary.main' : 'inherit',
+                }}
               >
-                <Link to={pages[0]} className="nav-link">
-                  {label}
-                </Link>
-              </Button>
+                {name}
+              </Typography>
             ))}
-          </Box>
+          </>
+         
+          {/* Shopping Cart and Avatar */}
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
-          <Box sx={{ flexGrow: 0 }}>
+            
+            <IconButton size="large" aria-label="show cart items" color="inherit">
+              <ShoppingCartIcon />
+            </IconButton>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={()=>handleCloseUserMenu(setting)}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+          <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+            <Avatar alt="User Avatar" src="/static/images/avatar/2.jpg" />
+          </IconButton>
+        </Tooltip>
+        <Menu
+          sx={{ mt: '45px' }}
+          id="menu-appbar"
+          anchorEl={anchorElUser}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={Boolean(anchorElUser)}
+          onClose={() => handleCloseUserMenu('')}
+        >
+          {settings.map((setting) => (
+            <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
+              <Typography textAlign="center">{setting}</Typography>
+            </MenuItem>
+          ))}
+        </Menu>
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
   );
-}
+};
+
 export default ResponsiveAppBar;

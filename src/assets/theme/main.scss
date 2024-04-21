@@ -6,7 +6,9 @@ body {
   font-family: $primaryFont;
   font-size: $primaryFontSize;
   color: #313131;
-    background: linear-gradient(#ff8884, #ffe4d9);
+  background: linear-gradient(#ff8884, #ffe4d9);
+  background-size: cover;
+  background-attachment: fixed; /* Fix background gradient to the viewport */
   
 }
 .custom-datepicker-input {

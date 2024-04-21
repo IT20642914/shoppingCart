@@ -3,11 +3,14 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
  import { APP_ROUTES } from "../utilities/routes.constants";
 import { Home ,Shipping} from '../pages';
 import ResponsiveAppBar from '../components/NavBar/Navbar';
-
- const MainLayout = ({ children }) => (
+import FaqPage from '../components/Footer/Footer';
+import { Box } from '@mui/material';
+ const UserRoutes = ({ children }) => (
  <>
-      <ResponsiveAppBar/> 
+    <ResponsiveAppBar/> 
     {children}
+    <Box sx={{margin:"1rem"}}></Box>
+    <FaqPage/>
   </>
  );
 const AppRoutes = () => {
@@ -15,10 +18,10 @@ const AppRoutes = () => {
     <BrowserRouter>
       <Routes>
 
-      <Route path={APP_ROUTES.ROOT} element={<MainLayout><Home /></MainLayout>} />
+      <Route path={APP_ROUTES.ROOT} element={<UserRoutes><Home /></UserRoutes>} />
 
-      <Route path={APP_ROUTES.SHIPPING_ADDRESS} element={<MainLayout><Shipping /></MainLayout>} />
-      {/* <Route path={APP_ROUTES.View_FAQ} element={<MainLayout><FaqPage /></MainLayout>} /> */}
+      <Route path={APP_ROUTES.SHIPPING_ADDRESS} element={<UserRoutes><Shipping /></UserRoutes>} />
+      {/* <Route path={APP_ROUTES.View_FAQ} element={<UserRoutes><FaqPage /></UserRoutes>} /> */}
       </Routes>
     </BrowserRouter>
   )
