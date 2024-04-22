@@ -130,8 +130,8 @@ const ResponsiveAppBar = () => {
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
             
-            <IconButton size="large" aria-label="show cart items" color="inherit">
-              <ShoppingCartIcon />
+            <IconButton size="large" aria-label="show cart items" color="inherit" >
+              <ShoppingCartIcon  onClick={()=>{navigate(APP_ROUTES.SHOPPING_CART)}} />
             </IconButton>
             <Tooltip title="Open settings">
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

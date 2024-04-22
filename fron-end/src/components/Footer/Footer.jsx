@@ -8,7 +8,7 @@ import SendIcon from '@mui/icons-material/Send';
 
 const Footer = () => {
   return (
-    <Box component="footer" sx={{ backgroundColor: 'rgba(255, 218, 221, 0.4)', color: 'black', padding: '2rem 0' }}>
+    <Box component="footer" sx={{ border:"1px solid #fff", backgroundColor: 'rgba(255, 218, 221, 0.2)', color: 'black', padding: '2rem 0',marginTop:"5rem" }}>
       <Container maxWidth="lg">
         <Grid container spacing={4} justifyContent="center">
                 
