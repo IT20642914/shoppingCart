@@ -9,7 +9,7 @@ import ShippingDetailsFrom from '../../components/ShippingDetailsFrom/ShippingDe
 import ShippingDetailsTable from '../../components/ShippingDetailsTable/ShippingDetailsTable';
 import { sampleShippingData } from '../../utilities/data.constants';
 import { APP_TABLE_CONFIGS ,SCREEN_MODES} from '../../utilities/app.constants';
-
+import {validateFormData} from  "../../helper/index"
 const Shipping = () => {
 
     const SHIPPING_FORM_INITIAL_STATE = {
@@ -18,16 +18,16 @@ const Shipping = () => {
         addressLine1: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
         addressLine2: { value: "", isRequired: false, disable: false, readonly: false, validator: "text", error: "", },
         city: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
-        postalCode: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
+        postalCode: { value: "", isRequired: true, disable: false, readonly: false, validator: "number", error: "", },
         country: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
-        phoneNumber: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
+        phoneNumber: { value: "", isRequired: true, disable: false, readonly: false, validator: "number", error: "", },
       };
       const INITIAL_SORT_META = {
         field: "",
         asc: false,
       }
       const [activeTab, setActiveTab] = useState(0);
-      const [shippingData, setShippingData] = useState(SHIPPING_FORM_INITIAL_STATE);
+      const [shippingDataForm, setShippingDataForm] = useState(SHIPPING_FORM_INITIAL_STATE);
       const [page, setPage] = useState(0)
       const [rowsPerPage, setRowsPerPage] = useState(APP_TABLE_CONFIGS.DEFAULT_ROWS_PER_PAGE)
       const [sortMeta, setSortMeta] = useState(INITIAL_SORT_META);
@@ -35,13 +35,105 @@ const Shipping = () => {
       const [isFiltered, setIsFiltered] = useState(false)
       const [ScreenMode, setScreenMode] = useState('');
 
+      const [helperText, setHelperText] = useState(true);
   // Define handleInputFocus and onInputHandleChange functions
   const handleInputFocus = (field, type) => {
-    // Implement focus logic here
+    if (type === "GI")
+    setShippingDataForm({
+  ...shippingDataForm,
+  [field]: {
+    ...shippingDataForm,
+    error: null,
+  },
+});
+
   };
 
   const onInputHandleChange = (field, value) => {
-    setShippingData({ ...filteredList, [field]: value });
+    setHelperText(true);
+console.log("field",field,value)
+    if(field==="email"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         email: {
+           ...shippingDataForm.email,
+           value: value,
+         },
+       });
+     }
+     if(field==="fullName"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         fullName: {
+           ...shippingDataForm.fullName,
+           value: value,
+         },
+       });
+     }
+     if(field==="addressLine1"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         addressLine1: {
+           ...shippingDataForm.addressLine1,
+           value: value,
+         },
+       });
+     }
+     if(field==="addressLine2"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         addressLine2: {
+           ...shippingDataForm.addressLine2,
+           value: value,
+         },
+       });
+     }
+     if(field==="city"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         city: {
+           ...shippingDataForm.city,
+           value: value,
+         },
+       });
+     }
+     if(field==="postalCode"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         postalCode: {
+           ...shippingDataForm.postalCode,
+           value: value,
+         },
+       });
+     }
+     if(field==="country"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         country: {
+           ...shippingDataForm.country,
+           value: value,
+         },
+       });
+     }
+     if(field==="phoneNumber"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         phoneNumber: {
+           ...shippingDataForm.phoneNumber,
+           value: value,
+         },
+       });
+     }
+     if(field==="email"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         email: {
+           ...shippingDataForm.email,
+           value: value,
+         },
+       });
+     }
+     
 }
 const handleTabChange = (event, newValue) => {
  
@@ -52,6 +144,7 @@ const handleTabChange = (event, newValue) => {
     if(newValue===2){
       setScreenMode(SCREEN_MODES.EDIT)
     }
+    
 };
 
 
@@ -73,13 +166,18 @@ useEffect(() => {
   if(activeTab===0){
     setScreenMode(SCREEN_MODES.CREATE)
   }
+  if(activeTab===0){
+    setScreenMode(SCREEN_MODES.VIEW)
+  }
 },[activeTab])
 
 
 const handleAction=(id,type)=>{
   setScreenMode(type)
-  if(type===SCREEN_MODES.EDIT||type===SCREEN_MODES.VIEW){
+  if(type===SCREEN_MODES.EDIT){
     setActiveTab(2)
+  }else if(type===SCREEN_MODES.VIEW){
+    setActiveTab(3)
   }
   console.log("first",id,type)
 
@@ -161,6 +259,38 @@ const handleReportGeneration=()=>{
 const onClearFilter = () => {
   setIsFiltered(false)
 }
+
+const onCallback=async (value)=>{
+  if(value){
+
+  const [validateData, isValid] = await validateFormData(shippingDataForm);
+  setShippingDataForm(validateData);
+
+
+  if(isValid){
+  setActiveTab(0);
+  }
+
+}else{
+  setShippingDataForm(SHIPPING_FORM_INITIAL_STATE);
+  setActiveTab(0);
+}
+}
+
+const handleEditRequest=async (value)=>{
+  if(value){
+  const [validateData, isValid] = await validateFormData(shippingDataForm);
+  setShippingDataForm(validateData);
+
+  if(isValid) {
+    setActiveTab(0)
+    }
+}else{
+  setShippingDataForm(SHIPPING_FORM_INITIAL_STATE);
+  setActiveTab(0)
+}
+}
+
   return (
     <section className={Styles.container}>
     <div className={Styles.formWrapper}>
@@ -193,23 +323,31 @@ const onClearFilter = () => {
                     <ShippingDetailsFrom
                         handleInputFocus={handleInputFocus}
                         onInputHandleChange={onInputHandleChange}
-                        shippingData={shippingData}
+                        shippingData={shippingDataForm}
+                        onCallback={onCallback}
+                        isCart={false}
                     />
                 )}
                     {activeTab === 2 && (
                     <ShippingDetailsFrom
                         handleInputFocus={handleInputFocus}
                         onInputHandleChange={onInputHandleChange}
-                        shippingData={shippingData}
+                        shippingData={shippingDataForm}
+                        helperText={helperText}
+                        isCart={false}
+                        onCallback={handleEditRequest}
                     />
                 )}
-                {activeTab === 3 && (
+                         {activeTab === 3 && (
                     <ShippingDetailsFrom
                         handleInputFocus={handleInputFocus}
                         onInputHandleChange={onInputHandleChange}
-                        shippingData={shippingData}
+                        shippingData={shippingDataForm}
+                        isCart={false}
+                        onCallback={handleEditRequest}
                     />
                 )}
+  
             </div>
        
     </div>

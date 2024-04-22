@@ -9,6 +9,8 @@ console.log(id)
 
 }
 const handleAddToCart=(id)=>{
+  // need handleAddToCart function
+  console.log(id)
 
 }
 

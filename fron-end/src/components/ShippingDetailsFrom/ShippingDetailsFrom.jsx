@@ -3,9 +3,9 @@ import { Grid } from '@mui/material';
 import { StyledTextField } from '../../assets/theme/theme';
 import style from './ShippingDetailsFrom.module.scss';
 import { CustomButton } from '../Shared';
-const ShippingDetailsFrom = ({ shippingData, handleInputFocus, onInputHandleChange }) => {
-    const { fullName,email, addressLine1, addressLine2, city, postalCode, country, phoneNumber, helperText,cancelButtonTitle,confirmButtonTitle,onCallback } = shippingData;
-  
+const ShippingDetailsFrom = ({ shippingData, handleInputFocus, onInputHandleChange,isCart,onCallback,helperText }) => {
+    const { fullName,email, addressLine1, addressLine2, city, postalCode, country, phoneNumber,cancelButtonTitle,confirmButtonTitle } = shippingData;
+
     return (
         <section className={style.FormContainer}>
         <Grid container spacing={4}>
@@ -138,8 +138,11 @@ const ShippingDetailsFrom = ({ shippingData, handleInputFocus, onInputHandleChan
                 />
             </Grid>
             <Grid item xs={12} md={12}>
-            <CustomButton text={cancelButtonTitle ? cancelButtonTitle : 'Cancel'} border='1px solid #ffe4d9' bgColor='#ff8884' onClick={() => onCallback(false)} />
+         {!isCart && (<> <CustomButton text={cancelButtonTitle ? cancelButtonTitle : 'Cancel'} border='1px solid #ffe4d9' bgColor='#ff8884' onClick={() => onCallback(false)} />
             <CustomButton text={confirmButtonTitle ? confirmButtonTitle : 'Confirm'} onClick={() => onCallback(true)}/>
+            </>
+         )
+            }
             </Grid>
         </Grid>
         </section>

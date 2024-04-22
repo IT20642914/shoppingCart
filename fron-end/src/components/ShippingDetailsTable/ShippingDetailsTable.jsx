@@ -31,13 +31,16 @@ const ShippingAddressTable = (props) => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const handleSearchChange = (event ) => {
-    // setSearchTerm(event.target.value);
+    setSearchTerm(event.target.value);
   };
 
   const filteredListData = searchTerm
   ? props.filteredList.filter((item) =>
       item.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.addressLine1.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.addressLine2.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item._id.includes(searchTerm)
     )
   : filteredList;
@@ -65,7 +68,7 @@ const ShippingAddressTable = (props) => {
           <CustomButton text='Clear filter' textColor='black' bgColor='#ffe4d9' onClick={props.onClearFilter} />
         }
   
-       <CustomButton text='Generate Manager Report'sx={{width:"2rem"}} onClick={() =>{props.handleReportGeneration() }} />
+       <CustomButton text='Generate Shipping Report'sx={{width:"2rem"}} onClick={() =>{props.handleReportGeneration() }} />
       </div>
      
     </div>

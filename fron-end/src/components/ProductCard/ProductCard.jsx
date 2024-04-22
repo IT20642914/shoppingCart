@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardMedia, Typography, Rating, Button } from '@mui/material';
-
+import {defaultImageUrl} from '../../assets/images'
 const ProductCard = ({ id, name, price, imageUrl, rating, onCardClick, handleAddToCart }) => {
   return (
     <Card sx={{
@@ -11,7 +11,7 @@ const ProductCard = ({ id, name, price, imageUrl, rating, onCardClick, handleAdd
     }} onClick={() => onCardClick(id)}>
       <CardMedia
         component="img"
-        image={imageUrl}
+        image={imageUrl||defaultImageUrl}
         alt={name}
         sx={{
           minWidth: 345,
