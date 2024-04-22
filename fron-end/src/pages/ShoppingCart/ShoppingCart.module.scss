@@ -1,8 +1,14 @@
 .Container{
+    padding: 1rem,1rem,0,1rem;
     display: flex;
     flex-direction: column;
-    height: 80vh;
+    height: 100vh;
     align-items: center;
     justify-content: flex-start ;
-    
+    .ButtonGroup{
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+        margin-top: 1rem;
+    }
 }

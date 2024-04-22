@@ -84,7 +84,7 @@ const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
         <Typography variant="h6" component="h2">Detailed Shipping Report</Typography>
         <Grid container spacing={2}>
           {cartItemList.map(item => (
-            <Grid item xs={6} md={6} key={item.id}>
+            <Grid item xs={6} md={12} key={item.id}>
               <Typography>
                 {item.name}:{calculateIndividualShipping(item) === 0 ? 'Free Shipping' : `$${calculateIndividualShipping(item).toFixed(2)} Shipping`}
               </Typography>

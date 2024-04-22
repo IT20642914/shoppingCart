@@ -8,6 +8,9 @@ const handleProductClick = (id) => {
 console.log(id)
 
 }
+const handleAddToCart=(id)=>{
+
+}
 
   return (
     <section className={Styles.container}>
@@ -21,7 +24,8 @@ console.log(id)
       {products.map((product) => (
         <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
           <ProductCard {...product}
-           onCardClick={handleProductClick} />
+           onCardClick={handleProductClick}
+           handleAddToCart={handleAddToCart} />
         </Grid>
       ))}
     </Grid>

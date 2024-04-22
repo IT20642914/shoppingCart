@@ -9,8 +9,9 @@ import { Box } from '@mui/material';
  <>
     <ResponsiveAppBar/> 
     {children}
-    <Box sx={{margin:"1rem"}}></Box>
+    <Box sx={{marginTop:"5rem"}}>
     <FaqPage/>
+    </Box>
   </>
  );
 const AppRoutes = () => {
