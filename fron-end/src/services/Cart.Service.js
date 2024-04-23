@@ -24,14 +24,27 @@ const GetShippingDetailByID=(id)=>{
 }
 
 
-const CartIncrementByUseIDAndShippingID = (payload) => {
-    return axiosPrivateInstance.post(`/api/cart/increment`, payload);
+const CartIncrementByUseID = (payload) => {
+    return axiosPrivateInstance.patch(`api/cart/itemIncrease/?userId=${payload.userId}&productId=${payload.productId}`, payload);
+
+}
+const CartDecrementByUseID = (payload) => {
+    return axiosPrivateInstance.patch(`api/cart/itemDecrease/?userId=${payload.userId}&productId=${payload.productId}`, payload);
+
+}
+const addToCartByUseID = (payload) => {
+    return axiosPrivateInstance.post(`api/cart/`, payload);
 
 }
 
 
 const ViewAllCartItemsByUserID = (id) => {
     return axiosPrivateInstance.get(`api/cart/?userID=${id}`);
+}
+
+const RemoveItemFromCart= async (id)=>{
+    return await axiosPrivateInstance.delete(`api/cart/${id}`);
+
 }
 
 
@@ -43,5 +56,9 @@ export const cartService = {
     UpdateShippingDetailsByID,
     DeleteShippingDetailsByID,
     GetShippingDetailByID,
-    ViewAllCartItemsByUserID
+    ViewAllCartItemsByUserID,
+    CartIncrementByUseID,
+    CartDecrementByUseID,
+    RemoveItemFromCart,
+    addToCartByUseID
 }

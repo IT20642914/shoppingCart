@@ -5,24 +5,20 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Style from './ShoppingCartStep.module.scss';
 import { TableContainer, Paper, Table, TableHead, TableCell,TableRow, TableBody, Tooltip,TablePagination} from '@mui/material';
 import {defaultImageUrl} from '../../assets/images'
-
+import {CART_ACTIONS} from '../../utilities/app.constants'
 const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
 
   console.log(cartItemList)
-  const handleRemoveItem = (itemId) => {
-    onUpdateCart(itemId, 0);
+  const handleRemoveItem = (id) => {
+    onUpdateCart(id, null,CART_ACTIONS.REMOVE);
   };
 
-  const handleIncreaseQuantity = (itemId, quantity) => {
-    onUpdateCart(itemId, quantity + 1);
+  const handleIncreaseQuantity = (item) => {
+    onUpdateCart(item._id, item, CART_ACTIONS.INCREASE);
   };
 
-  const handleDecreaseQuantity = (itemId, quantity) => {
-    if (quantity > 1) {
-      onUpdateCart(itemId, quantity - 1);
-    } else {
-      onUpdateCart(itemId, 0);
-    }
+  const handleDecreaseQuantity = (item) => {
+    onUpdateCart(item._id, item, CART_ACTIONS.DECREASE);
   };
 
   // Calculate shipping cost for an individual item
@@ -59,10 +55,10 @@ const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
           {cartItemList.map(item => (
             <ListItem key={item._id} secondaryAction={
               <>
-                <IconButton onClick={() => handleDecreaseQuantity(item._id, item.Qty)}>
+                <IconButton onClick={() => handleDecreaseQuantity(item)}>
                   <RemoveCircleOutlineIcon />
                 </IconButton>
-                <IconButton onClick={() => handleIncreaseQuantity(item._id, item.Qty)}>
+                <IconButton onClick={() => handleIncreaseQuantity(item)}>
                   <AddCircleOutlineIcon />
                 </IconButton>
                 <Button onClick={() => handleRemoveItem(item._id)}>Remove</Button>

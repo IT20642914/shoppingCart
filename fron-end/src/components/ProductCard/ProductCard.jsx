@@ -8,7 +8,7 @@ const ProductCard = ({ _id, product_name, value, imageUrl, averageRating,Quantit
       background: "rgba(255, 255, 255, 0.2)",
       border: "1px solid rgba(255, 255, 255, 0.5)",
       borderRadius: "16px",
-    }} onClick={() => onCardClick(_id)}>
+    } }>
       <CardMedia
         component="img"
         image={imageUrl||defaultImageUrl}
@@ -35,7 +35,6 @@ const ProductCard = ({ _id, product_name, value, imageUrl, averageRating,Quantit
           variant="contained"
           color="primary"
           onClick={(e) => {
-            e.stopPropagation(); // Prevents the onCardClick from being triggered when the button is clicked
             handleAddToCart(_id);
           }}
           sx={{ marginTop: 2,width:"10rem" }} // Adds some space above the button

@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import ShoppingCartStep from '../../components/ShoppingCartStep/ShoppingCartStep';
 import PaymentDetailsStep from '../../components/PaymentDetails/PaymentDetails';
 import Styles from './ShoppingCart.module.scss';
-import { cartItems } from '../../utilities/index';
+import { CART_ACTIONS, cartItems } from '../../utilities/index';
 import ShippingDetailsFrom from '../../components/ShippingDetailsFrom/ShippingDetailsFrom';
 import { sampleShippingData } from '../../utilities/data.constants';
 import Radio from '@mui/material/Radio';
@@ -17,6 +17,7 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel'
 import { Grid } from '@mui/material';
 import { cartService } from '../../services/Cart.Service';  
+import { toast } from 'react-toastify';
 const ShoppingCart = () => {
 
   const SHIPPING_FORM_INITIAL_STATE = {
@@ -78,7 +79,37 @@ const ShoppingCart = () => {
     setCompleted({});
   };
 
-  const onUpdateCart = (itemId, quantity) => {
+  const onUpdateCart = async (itemId, Item,mode) => {
+    console.log("itemId",itemId,Item,mode)
+    if(mode ===CART_ACTIONS.REMOVE){
+
+      try {
+      const remove= await cartService.RemoveItemFromCart(itemId)
+      if(remove.status===200){
+        toast.success("Item Removed from Cart Successfully")
+        fetchShippingData() 
+      }
+    }catch (error) {
+        toast.error("Error in Removing from Cart Item")
+        console.error('Error fetching data:', error);
+      }
+
+      if(mode===CART_ACTIONS.INCREASE){
+        try {
+          
+          const increase= await cartService.CartIncrementByUseIDAndShippingID(Item)
+          if(increase.status===200){
+            toast.success("Item Increased in Cart Successfully")
+            fetchShippingData() 
+          }
+        }catch (error) {
+        console.error('Error fetching data:', error);
+        toast.error("Error in Increasing Cart Item")
+        }
+      
+      
+      }
+    }
     
    // const updatedCartItems = cartItemList.map(item => (item._id === itemId ? { ...item, quantity } : item));
   
