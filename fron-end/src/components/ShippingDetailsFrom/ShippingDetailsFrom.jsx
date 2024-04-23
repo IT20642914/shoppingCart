@@ -3,7 +3,8 @@ import { Grid } from '@mui/material';
 import { StyledTextField } from '../../assets/theme/theme';
 import style from './ShippingDetailsFrom.module.scss';
 import { CustomButton } from '../Shared';
-const ShippingDetailsFrom = ({ shippingData, handleInputFocus, onInputHandleChange,isCart,onCallback,helperText }) => {
+import { SCREEN_MODES } from '../../utilities/app.constants';
+const ShippingDetailsFrom = ({ shippingData, handleInputFocus, onInputHandleChange,isCart,onCallback,helperText, ScreenMode }) => {
     const { fullName,email, addressLine1, addressLine2, city, postalCode, country, phoneNumber,cancelButtonTitle,confirmButtonTitle } = shippingData;
 
     return (
@@ -137,13 +138,15 @@ const ShippingDetailsFrom = ({ shippingData, handleInputFocus, onInputHandleChan
                     onChange={(event) => onInputHandleChange('phoneNumber', event.target.value)}
                 />
             </Grid>
-            <Grid item xs={12} md={12}>
+            {!(ScreenMode=== SCREEN_MODES.VIEW) &&(
+           <Grid item xs={12} md={12}>
          {!isCart && (<> <CustomButton text={cancelButtonTitle ? cancelButtonTitle : 'Cancel'} border='1px solid #ffe4d9' bgColor='#ff8884' onClick={() => onCallback(false)} />
             <CustomButton text={confirmButtonTitle ? confirmButtonTitle : 'Confirm'} onClick={() => onCallback(true)}/>
             </>
          )
             }
-            </Grid>
+            </Grid>)
+            }
         </Grid>
         </section>
     );

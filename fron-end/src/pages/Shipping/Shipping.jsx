@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 const Shipping = () => {
 
     const SHIPPING_FORM_INITIAL_STATE = {
+        _id:{ value: "", isRequired: false, disable: false, readonly: true, validator: "text", error: "", },
         fullName: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
         email: { value: "", isRequired: true, disable: false, readonly: false, validator: "email", error: "", },
         addressLine1: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
@@ -201,7 +202,23 @@ const handleAction=(id,type)=>{
  
   if(type===SCREEN_MODES.VIEW||type===SCREEN_MODES.EDIT){
     const _isDisable = type === SCREEN_MODES.VIEW
-    
+cartService.GetShippingDetailByID(id).then((response)=>{
+
+  const data = response.data[0]
+  console.log("data",data)
+  setShippingDataForm({
+    _id:{ value:data._id, isRequired: false, disable: false, readonly: true, validator: "text", error: "", },
+    fullName: { value: data.fullName, isRequired: true, disable: _isDisable, readonly: _isDisable, validator: "text", error: "", },
+    addressLine1: { value: data.addressLine1, isRequired: true, disable: _isDisable, readonly: _isDisable, validator: "text", error: "", },
+    addressLine2: { value: data.addressLine2, isRequired: false, disable: _isDisable, readonly: _isDisable, validator: "text", error: "", },
+    city: { value: data.city, isRequired: true, disable: _isDisable, readonly: _isDisable, validator: "text", error: "", },
+    postalCode: { value: data.postalCode, isRequired: true, disable: _isDisable, readonly: _isDisable, validator: "number", error: "", },
+    country: { value: data.country, isRequired: true, disable: _isDisable, readonly: _isDisable, validator: "text", error: "", },
+    email: { value: data.email, isRequired: true, disable: _isDisable, readonly: _isDisable, validator: "email", error: "", },
+    phoneNumber: { value: data.phoneNumber, isRequired: true, disable: _isDisable, readonly: _isDisable, validator: "number", error: "", },
+})}).catch((error)=>{
+  toast.error(error)
+})
   }
 
   if(type===SCREEN_MODES.DELETE){
@@ -306,6 +323,7 @@ console.log("isValid",isValid)
   if(isValid){
     
    const payload={
+   
     userId: "66194666a02984b0db969e2f",
     fullName: shippingDataForm.fullName.value,
     email:shippingDataForm.email.value,
@@ -334,13 +352,34 @@ cartService.AddShippingDetailsByUserID(payload).then((response)=>{
 }
 
 const handleEditRequest=async (value)=>{
-  console.log("first",value)
   if(value){
   const [validateData, isValid] = await validateFormData(shippingDataForm);
   setShippingDataForm(validateData);
 
   if(isValid) {
-    setActiveTab(0)
+  
+const payload={
+  _id:shippingDataForm._id.value,
+  fullName: shippingDataForm.fullName.value,
+  email:shippingDataForm.email.value,
+  addressLine1: shippingDataForm.addressLine1.value,
+  addressLine2: shippingDataForm.addressLine2.value,
+  city: shippingDataForm.city.value,
+  postalCode: shippingDataForm.postalCode.value,
+  country: shippingDataForm.country.value,
+  phoneNumber: shippingDataForm.phoneNumber.value,
+}
+console.log(payload)
+cartService.UpdateShippingDetailsByID(payload).then((response)=>{
+  toast.success("Shipping Details Updated Successfully")
+  getShippingData()
+  setShippingDataForm(SHIPPING_FORM_INITIAL_STATE)
+  setActiveTab(0);
+  
+}).catch((error)=>{
+  toast.error(error)
+})
+
     }
 }else{
   setShippingDataForm(SHIPPING_FORM_INITIAL_STATE);
@@ -353,9 +392,10 @@ const handleEditRequest=async (value)=>{
     <div className={Styles.formWrapper}>
 
     <Tabs value={activeTab} onChange={handleTabChange}>
-                <Tab label="Shipping Details List" />
-                <Tab label="Add Shipping" />
-             { ScreenMode&&ScreenMode===SCREEN_MODES.EDIT&&  <Tab label="MAnage Shipping" />}
+                <Tab label="Shipping Details List" value={0} />
+                <Tab label="Add Shipping" value={1} />
+             {(ScreenMode===SCREEN_MODES.EDIT)&&  <Tab label="Manage Shipping" value={2} />}
+             {(ScreenMode===SCREEN_MODES.VIEW)&&  <Tab label="View Shipping" value={3} />}
             </Tabs>
             <div className={Styles.tabContent}>
                 {activeTab === 0 && <ShippingDetailsTable
@@ -383,6 +423,7 @@ const handleEditRequest=async (value)=>{
                         shippingData={shippingDataForm}
                         onCallback={onCallback}
                         isCart={false}
+                        ScreenMode={ScreenMode}
                     />
                 )}
                     {activeTab === 2 && (
@@ -392,6 +433,7 @@ const handleEditRequest=async (value)=>{
                         shippingData={shippingDataForm}
                         helperText={helperText}
                         isCart={false}
+                        ScreenMode={ScreenMode}
                         onCallback={handleEditRequest}
                     />
                 )}
@@ -401,7 +443,8 @@ const handleEditRequest=async (value)=>{
                         onInputHandleChange={onInputHandleChange}
                         shippingData={shippingDataForm}
                         isCart={false}
-                        onCallback={handleEditRequest}
+                        ScreenMode={ScreenMode}
+                        onCallback={()=>{}}
                     />
                 )}
   
