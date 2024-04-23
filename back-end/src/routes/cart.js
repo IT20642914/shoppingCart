@@ -29,6 +29,6 @@ router.get('/feedbacks', getAllFeedbacks);
 router.get('/averageratings', getAllFeedbacksAndAverageRatings);
 
 // Route for searching shopping cart items by userId and addressId
-router.get('/itemIncrease', increaseCartItems );
+router.patch('/itemIncrease', increaseCartItems );
 
 export default router;
