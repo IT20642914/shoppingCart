@@ -14,6 +14,7 @@ const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
   };
 
   const handleIncreaseQuantity = (item) => {
+    console.log("item Increase",item)
     onUpdateCart(item._id, item, CART_ACTIONS.INCREASE);
   };
 

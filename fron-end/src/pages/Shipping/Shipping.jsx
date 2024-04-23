@@ -46,8 +46,7 @@ useEffect(() => {
 
 
    const getShippingData = async () => {
-   const userID ="66194666a02984b0db969e2f"
-   localStorage.getItem("userID")
+   const userID =localStorage.getItem("userId")
     cartService.GetAllShippingDetailsByUserID(userID).then((response)=>{
       setFilteredList(response.data)
     }).catch((error)=>{

@@ -212,3 +212,28 @@ export const getShoppingCartDetails = async (req, res) => {
     res.status(500).json({ error: true, message: "Internal Server Error" });
   }
 };
+
+
+export const updateUserCartShipping = async (req, res) => {
+  const { userId } = req.params;
+  const { shippingId } = req.body;
+
+  try {
+    // Update all cart items with the specified userId to the new ShippingId
+    const updatedCartItems = await ShoppingCart.updateMany(
+      { userId: userId }, // Filter to match only items belonging to the specified user
+      { $set: { ShippingId: shippingId } } // Update action
+    );
+
+    if (updatedCartItems.matchedCount === 0) {
+      res.status(404).send('No cart items found for this user');
+    } else {
+      res.status(200).json({
+        message: "Cart items updated successfully",
+        details: updatedCartItems
+      });
+    }
+  } catch (error) {
+    res.status(400).json({ error: true, message: error.message });
+  }
+};

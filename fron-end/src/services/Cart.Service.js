@@ -25,11 +25,12 @@ const GetShippingDetailByID=(id)=>{
 
 
 const CartIncrementByUseID = (payload) => {
+    console.log("payload",payload)
     return axiosPrivateInstance.patch(`api/cart/itemIncrease/?userId=${payload.userId}&productId=${payload.productId}`, payload);
 
 }
 const CartDecrementByUseID = (payload) => {
-    return axiosPrivateInstance.patch(`api/cart/itemDecrease/?userId=${payload.userId}&productId=${payload.productId}`, payload);
+    return axiosPrivateInstance.patch(`api/cart/itemDecrease/?userId=${payload.userId}&productId=${payload.ProductId}`, payload);
 
 }
 const addToCartByUseID = (payload) => {
@@ -47,6 +48,10 @@ const RemoveItemFromCart= async (id)=>{
 
 }
 
+const UpdateCartShippingIDByByUserId = (payload) => {
+    return axiosPrivateInstance.put(`api/cart/update-user-cart-shipping/${payload.userId}`, payload);
+}
+
 
 
 export const cartService = {
@@ -60,5 +65,6 @@ export const cartService = {
     CartIncrementByUseID,
     CartDecrementByUseID,
     RemoveItemFromCart,
-    addToCartByUseID
+    addToCartByUseID,
+    UpdateCartShippingIDByByUserId
 }

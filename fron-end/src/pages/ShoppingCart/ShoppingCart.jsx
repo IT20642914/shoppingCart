@@ -80,7 +80,6 @@ const ShoppingCart = () => {
   };
 
   const onUpdateCart = async (itemId, Item,mode) => {
-    console.log("itemId",itemId,Item,mode)
     if(mode ===CART_ACTIONS.REMOVE){
 
       try {
@@ -93,27 +92,38 @@ const ShoppingCart = () => {
         toast.error("Error in Removing from Cart Item")
         console.error('Error fetching data:', error);
       }
+      
+    }
 
-      if(mode===CART_ACTIONS.INCREASE){
-        try {
-          
-          const increase= await cartService.CartIncrementByUseIDAndShippingID(Item)
-          if(increase.status===200){
-            toast.success("Item Increased in Cart Successfully")
-            fetchShippingData() 
-          }
-        }catch (error) {
-        console.error('Error fetching data:', error);
-        toast.error("Error in Increasing Cart Item")
+    if(mode===CART_ACTIONS.INCREASE){
+      console.log("mode",mode,CART_ACTIONS.INCREASE)
+      try {
+        console.log("first",Item)
+        const increase= await cartService.CartIncrementByUseID(Item)
+        if(increase.status===200){
+          toast.success("Item Increased in Cart Successfully")
+          fetchShippingData() 
         }
-      
-      
+      }catch (error) {
+      console.error('Error fetching data:', error);
+      toast.error("Error in Increasing Cart Item")
       }
+    
     }
     
-   // const updatedCartItems = cartItemList.map(item => (item._id === itemId ? { ...item, quantity } : item));
-  
-    //setCartItemsList(updatedCartItems);
+    if(mode===CART_ACTIONS.DECREASE){
+      try {
+        console.log("first",Item)
+        const increase= await cartService.CartDecrementByUseID(Item)
+        if(increase.status===200){
+          toast.success("Item Decreasing in Cart Successfully")
+          fetchShippingData() 
+        }
+      }catch (error) {
+      console.error('Error fetching data:', error);
+      toast.error("Error in Decreasing Cart Item")
+      }
+    }
   };
 
 
@@ -247,12 +257,25 @@ console.log("field",field,value)
     });
   };
 
-  const handleRadioChange = (event) => {
+  const handleRadioChange = async (event) => {
 
-console.log(allShippingDetails,"allShippingDetails")
      const selectedDetail = allShippingDetails.find(detail => detail._id === event.target.value);
-   setSelectedDetailId(event.target.value);
+    setSelectedDetailId(event.target.value);
     setShippingDataFromDetail(selectedDetail);
+   const userId=localStorage.getItem("userId")
+const payload={
+  userId:userId,
+  shippingId: selectedDetail._id}
+console.log("s",payload)
+
+try {
+   const response=  await cartService.UpdateCartShippingIDByByUserId(payload)
+
+   response.status===200 && toast.success("Shipping Details Updated Successfully")
+} catch (error) {
+  
+}
+
   };
 
   return (

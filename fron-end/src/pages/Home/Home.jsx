@@ -28,11 +28,11 @@ setProducts(response.data)
 const handleAddToCart=async (id)=>{
   const cartItem=products.find((product)=>product._id===id)
   console.log("cartItem",cartItem)
-  //userid
-  localStorage.getItem("userId")
+
+  const userId =localStorage.getItem("userId")
   try {
 const payload={
-  userId: "66194666a02984b0db969e2f",
+  userId: userId,
   ProductId: cartItem._id,
   ProductName: cartItem.product_name,
   UnitPrice:cartItem.value,
