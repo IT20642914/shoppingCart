@@ -103,6 +103,37 @@ export const createShoppingCart = async (req, res) => {
 };
 
 
+export const increaseCartItems = async (req, res) => {
+  try {
+    const { userId, addressId } = req.query;
+
+    // Search for records with the provided userId and addressId
+    const shoppingCartItems = await ShoppingCart.find({ userId, ShippingId: addressId });
+
+    if (shoppingCartItems.length === 0) {
+      // If no matching record found, call createShoppingCart function
+      await createShoppingCart(req, res);
+    } else {
+      // If matching record found, call updateShoppingCart function
+      const existingCartItem = shoppingCartItems[0];
+      existingCartItem.Qty += 1;
+
+      if (existingCartItem.Qty <= 0) {
+        // If the quantity becomes zero or less, remove the item
+        await existingCartItem.remove();
+        res.status(200).json({ message: "Shopping cart item removed" });
+      } else {
+        // Otherwise, save the updated item
+        const updatedCartItem = await existingCartItem.save();
+        res.status(200).json(updatedCartItem);
+      }
+    }
+  } catch (error) {
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+};
+
+
 
 // Controller for updating an existing shopping cart item
 export const updateShoppingCart = async (req, res) => {
