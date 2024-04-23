@@ -135,6 +135,37 @@ export const increaseCartItems = async (req, res) => {
 
 
 
+export const DecreaseCartItems = async (req, res) => {
+  try {
+    const { userId, productId } = req.query;
+
+    // Search for records with the provided userId and productId
+    const shoppingCartItems = await ShoppingCart.find({ userId, ProductId: productId });
+
+    if (shoppingCartItems.length === 0) {
+      // If no matching record found, return error message
+      return res.status(404).json({ error: true, message: "Product not found in cart" });
+    }
+
+    // If matching record found, update the quantity
+    const existingCartItem = shoppingCartItems[0];
+    existingCartItem.Qty -= 1;
+
+    if (existingCartItem.Qty <= 0) {
+      // If the quantity becomes zero or less, remove the item
+      await existingCartItem.remove();
+      return res.status(200).json({ message: "Shopping cart item removed" });
+    }
+
+    // Otherwise, save the updated item
+    const updatedCartItem = await existingCartItem.save();
+    res.status(200).json(updatedCartItem);
+  } catch (error) {
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+};
+
+
 // Controller for updating an existing shopping cart item
 export const updateShoppingCart = async (req, res) => {
   try {

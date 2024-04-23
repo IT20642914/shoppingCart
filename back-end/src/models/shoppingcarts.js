@@ -37,7 +37,7 @@ const cartSchema = new Schema({
     ShippingId:{
         type: String,
         required: false,
-        defaultValue:null
+        default:null
     }
 }, {
     timestamps: true
