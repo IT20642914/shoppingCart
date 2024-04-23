@@ -52,6 +52,10 @@ const UpdateCartShippingIDByByUserId = (payload) => {
     return axiosPrivateInstance.put(`api/cart/update-user-cart-shipping/${payload.userId}`, payload);
 }
 
+const getReport = (userId) => {
+    return axiosPrivateInstance.get(`api/cart/report/${userId}`);
+}
+
 
 
 export const cartService = {
@@ -66,5 +70,5 @@ export const cartService = {
     CartDecrementByUseID,
     RemoveItemFromCart,
     addToCartByUseID,
-    UpdateCartShippingIDByByUserId
+    UpdateCartShippingIDByByUserId,getReport
 }

@@ -1,7 +1,8 @@
 import ShoppingCart from '../models/shoppingcarts.js';
 import Products from '../models/produts.js';
 import Feedback from '../models/feedback.js';
-
+import ShippingDetails from '../models/shippingDetails.js'
+import mongoose from 'mongoose';
 
 // Controller for getting all shopping carts for a specific customer
 export const getShoppingCartsItems = async (req, res) => {
@@ -221,7 +222,7 @@ export const updateUserCartShipping = async (req, res) => {
   try {
     // Update all cart items with the specified userId to the new ShippingId
     const updatedCartItems = await ShoppingCart.updateMany(
-      { userId: userId }, // Filter to match only items belonging to the specified user
+      { $match: { userId: mongoose.Types.ObjectId(userId) } }, // Filter to match only items belonging to the specified user
       { $set: { ShippingId: shippingId } } // Update action
     );
 
@@ -235,5 +236,30 @@ export const updateUserCartShipping = async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({ error: true, message: error.message });
+  }
+};
+
+export const generateUserReport = async (req, res) => {
+  const { userId } = req.params; // Assuming you're getting userId from route params
+
+  try {
+      const cartItems = await ShoppingCart.find({ userId: userId });
+      if (cartItems.length === 0) {
+          return res.status(404).json({ message: "No cart items found for this user" });
+      }
+
+      // Fetch shipping details for each cart item
+      const detailedCartItems = await Promise.all(cartItems.map(async (item) => {
+          const shippingInfo = await ShippingDetails.findById(item.ShippingId);
+          return {
+              ...item.toObject(), // Convert MongoDB document to a plain JavaScript object
+              shippingInfo
+          };
+      }));
+
+      res.json(detailedCartItems);
+  } catch (error) {
+      console.error('Error retrieving cart items and shipping details:', error);
+      res.status(500).json({ message: "Internal Server Error" });
   }
 };

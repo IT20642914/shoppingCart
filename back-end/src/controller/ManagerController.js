@@ -1,6 +1,7 @@
 import logger from "../utils/logger.js";
 import Manager from '../models/manager.js'
 import { response } from "express";
+
 export const handleSaveManager = async (req,res) => {
     const {email}=req.body;
     try{

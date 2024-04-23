@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getShoppingCartsItems, getAllProducts, getAllFeedbacks, getAllFeedbacksAndAverageRatings,
-    createShoppingCart, increaseCartItems ,DecreaseCartItems, updateUserCartShipping,  updateShoppingCart, deleteShoppingCart, getShoppingCartDetails } from "../controller/cartController.js";
+    createShoppingCart, generateUserReport,increaseCartItems ,DecreaseCartItems, updateUserCartShipping,  updateShoppingCart, deleteShoppingCart, getShoppingCartDetails } from "../controller/cartController.js";
 
 const router = Router();
 
@@ -35,4 +35,6 @@ router.patch('/itemIncrease', increaseCartItems );
 router.patch('/itemDecrease', DecreaseCartItems );
 
 router.put('/update-user-cart-shipping/:userId', updateUserCartShipping)
+router.get('/report/:userId', generateUserReport)
+
 export default router;

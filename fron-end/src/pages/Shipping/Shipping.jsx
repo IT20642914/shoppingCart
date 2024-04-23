@@ -12,6 +12,8 @@ import { APP_TABLE_CONFIGS ,SCREEN_MODES} from '../../utilities/app.constants';
 import {validateFormData} from  "../../helper/index"
 import {cartService} from '../../services/Cart.Service'
 import { toast } from 'react-toastify';
+import { Page, Text, View, Document, StyleSheet, pdf,Image  } from '@react-pdf/renderer';
+import {logo} from '../../assets/images'
 const Shipping = () => {
 
     const SHIPPING_FORM_INITIAL_STATE = {
@@ -303,9 +305,120 @@ const getFilterList = (col) => {
           .filter((value, index, array) => array.indexOf(value) === index);
   } else return [];
 };
+const styles = StyleSheet.create({
+  page: {
+    backgroundColor: '#db9b99',
+    flexDirection: 'column',
+    padding: 10,
+  },
+  title: {
+    color:'#4a033d',
+    fontSize: 20,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  table: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 5,
+    borderWidth: 1,
+    borderColor: '#000',
+    marginBottom: 20,
+  },
+  row: {
+    flexDirection: 'row',
+    borderTop: '1 solid black',
+    paddingVertical: 4,
+  },
+  header: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    backgroundColor: '#a45a70',
+    padding: 5,
+    textAlign: 'center',
+    flex: 1, // Equal width for all header cells
+  },
+  cell: {
+    backgroundColor:"#ff8884",
+    fontSize: 12,
+    padding: 5,
+    borderRightWidth: 1,
+    textAlign: 'left',
+    overflowWrap: 'break-word', // Allow text to wrap within the cell
+    flex: 1, // Equal width for all data cells
+  },
+});
+
+const ShoppingCartPDF = ({ data }) => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <Image src={logo} style={{ width: 60, height: 60, alignSelf: 'center' }} />
+      <Text style={styles.title}>Shopping Cart and Shipping Details</Text>
+
+      {/* Product Details Table */}
+      <Text style={styles.title}>Product Details In Shopping Cart</Text>
+      <View style={styles.table}>
+        <View style={styles.row}>
+          <Text style={styles.header}>Product Name</Text>
+          <Text style={styles.header}>Qty</Text>
+          <Text style={styles.header}>Unit Price</Text>
+          <Text style={styles.header}>Total Price</Text>
+        </View>
+        {data.map((item, index) => (
+          <View key={index} style={styles.row}>
+            <Text style={styles.cell}>{item.ProductName}</Text>
+            <Text style={styles.cell}>{item.Qty}</Text>
+            <Text style={styles.cell}>${item.UnitPrice.toFixed(2)}</Text>
+            <Text style={styles.cell}>${item.TotalPrice.toFixed(2)}</Text>
+          </View>
+        ))}
+      </View>
+
+      {/* Shipping Details Table */}
+      <Text style={styles.title}>Shipping Details for Each Product</Text>
+      <View style={styles.table}>
+        <View style={styles.row}>
+          <Text style={styles.header}>Full Name</Text>
+          <Text style={styles.header}>Email</Text>
+          <Text style={styles.header}>Address</Text>
+          <Text style={styles.header}>City</Text>
+          <Text style={styles.header}>Postal Code</Text>
+          <Text style={styles.header}>Country</Text>
+          <Text style={styles.header}>Phone</Text>
+        </View>
+        {data.map((item, index) => (
+          <View key={index} style={styles.row}>
+            <Text style={styles.cell}>{item.shippingInfo.fullName}</Text>
+            <Text style={styles.cell}>{item.shippingInfo.email}</Text>
+            <Text style={styles.cell}>{item.shippingInfo.addressLine1} {item.shippingInfo.addressLine2}</Text>
+            <Text style={styles.cell}>{item.shippingInfo.city}</Text>
+            <Text style={styles.cell}>{item.shippingInfo.postalCode}</Text>
+            <Text style={styles.cell}>{item.shippingInfo.country}</Text>
+            <Text style={styles.cell}>{item.shippingInfo.phoneNumber}</Text>
+          </View>
+        ))}
+      </View>
+    </Page>
+  </Document>
+);
+
 
 const handleReportGeneration=()=>{
   console.log("report")
+  const userId=localStorage.getItem("userId")
+  cartService.getReport(userId).then(async (response)=>{
+    const data=response.data
+    const blob = await pdf(<ShoppingCartPDF data={data} />).toBlob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'ManagerReport.pdf');
+    document.body.appendChild(link);
+    link.click();
+    toast.success("Report Generated Successfully")
+   }).catch((error)=>{
+    toast.error("Error Generating Report")
+    console.log("error",error)})  
 
 }
 
