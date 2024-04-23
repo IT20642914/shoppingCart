@@ -105,10 +105,10 @@ export const createShoppingCart = async (req, res) => {
 
 export const increaseCartItems = async (req, res) => {
   try {
-    const { userId, addressId } = req.query;
+    const { userId, productId } = req.query;
 
     // Search for records with the provided userId and addressId
-    const shoppingCartItems = await ShoppingCart.find({ userId, ShippingId: addressId });
+    const shoppingCartItems = await ShoppingCart.find({ userId, ProductId: productId });
 
     if (shoppingCartItems.length === 0) {
       // If no matching record found, call createShoppingCart function

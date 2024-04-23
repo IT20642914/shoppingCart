@@ -12,11 +12,11 @@ const cartSchema = new Schema({
     },
     CustomerID: {
         type: String,
-        required: true
+        required: false
     },
     CustomerName: {
         type: String,
-        required: true
+        required: false
     },
     ProductName: {
         type: String,
