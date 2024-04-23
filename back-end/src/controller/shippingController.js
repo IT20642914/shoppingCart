@@ -31,6 +31,20 @@ export const getShippingAddressesByUserId = async (req, res) => {
       res.status(500).json({ error: true, message: "Internal Server Error" });
     }
   };
+
+  export const getSingleShippingAddressesByUserId = async (req, res) => {
+    try {
+      const { addressId } = req.params;
+      const shippingAddresses = await ShippingDetails.find({ _id: addressId});
+      if (shippingAddresses.length === 0) {
+        return res.status(404).json({ error: true, message: "No shipping addresses found for this user" });
+      }
+      res.status(200).json(shippingAddresses);
+    } catch (error) {
+      res.status(500).json({ error: true, message: "Internal Server Error" });
+    }
+  };
+
   
   // Controller for updating a shipping address by user ID and address ID
   export const updateShippingAddressByUserId = async (req, res) => {
@@ -49,6 +63,8 @@ export const getShippingAddressesByUserId = async (req, res) => {
       res.status(400).json({ error: true, message: error.message });
     }
   };
+
+  
   
   // Controller for deleting a shipping address by user ID and address ID
   export const deleteShippingAddressByUserId = async (req, res) => {

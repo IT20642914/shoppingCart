@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createShippingAddress, getShippingAddressesByUserId, updateShippingAddressByUserId, deleteShippingAddressByUserId } from "../controller/shippingController.js";
+import { createShippingAddress, getShippingAddressesByUserId, updateShippingAddressByUserId,getSingleShippingAddressesByUserId, deleteShippingAddressByUserId } from "../controller/shippingController.js";
 
 const router = Router();
 
@@ -11,6 +11,8 @@ router.get('/:userId', getShippingAddressesByUserId);
 
 // Route for updating a shipping address by user ID and address ID
 router.put('/:addressId', updateShippingAddressByUserId);
+
+router.get('/single/:addressId', getSingleShippingAddressesByUserId);
 
 // Route for deleting a shipping address by user ID and address ID
 router.delete('/:addressId', deleteShippingAddressByUserId);
