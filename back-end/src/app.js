@@ -10,7 +10,7 @@ import managerRoutes from "./routes/manager.js";
 import feedBackRoutes from "./routes/feedback.js";
 import cartRoutes from "./routes/cart.js";
 const app = express();
-const PORT = process.env.PORT || "8000";
+const PORT = process.env.PORT || "9090";
 
 const corsConfig = {
     credentials: true,
