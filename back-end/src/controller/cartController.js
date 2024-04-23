@@ -93,10 +93,24 @@ export const getAllFeedbacksAndAverageRatings = async (req, res) => {
 
 // Controller for creating a new shopping cart item
 export const createShoppingCart = async (req, res) => {
+  const { userId, ProductId } = req.body;
+
   try {
-    const shoppingCart = new ShoppingCart(req.body);
-    const savedShoppingCart = await shoppingCart.save();
-    res.status(201).json(savedShoppingCart);
+    // Check if a cart item with the same userId and ProductId already exists
+    const existingCartItem = await ShoppingCart.findOne({ userId, ProductId });
+
+    if (existingCartItem) {
+      // If item exists, increase Qty by 1
+      existingCartItem.Qty += 1;
+      existingCartItem.TotalPrice = existingCartItem.UnitPrice * existingCartItem.Qty;  // Update TotalPrice based on new Qty
+      const updatedCartItem = await existingCartItem.save();
+      res.status(200).json(updatedCartItem);
+    } else {
+      // If no existing item, create a new cart item
+      const shoppingCart = new ShoppingCart(req.body);
+      const savedShoppingCart = await shoppingCart.save();
+      res.status(201).json(savedShoppingCart);
+    }
   } catch (error) {
     res.status(400).json({ error: true, message: error.message });
   }
