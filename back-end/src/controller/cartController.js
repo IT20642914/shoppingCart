@@ -6,8 +6,8 @@ import Feedback from '../models/feedback.js';
 // Controller for getting all shopping carts for a specific customer
 export const getShoppingCartsItems = async (req, res) => {
   try {
-    const { customerId } = req.query;
-    const shoppingCarts = await ShoppingCart.find({ CustomerID: customerId });
+    const { userID } = req.query;
+    const shoppingCarts = await ShoppingCart.find({ userID: userID });
     if (shoppingCarts.length === 0) {
       return res.status(404).json({ error: true, message: "No shopping carts found for this customer" });
     }
@@ -101,6 +101,8 @@ export const createShoppingCart = async (req, res) => {
     res.status(400).json({ error: true, message: error.message });
   }
 };
+
+
 
 // Controller for updating an existing shopping cart item
 export const updateShoppingCart = async (req, res) => {
