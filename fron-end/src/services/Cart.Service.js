@@ -13,7 +13,7 @@ const AddShippingDetailsByUserID = (payload) => {
     return axiosPrivateInstance.post(`api/shipping/`,payload);
 }
 const UpdateShippingDetailsByID = (payload) => {
-    return axiosPrivateInstance.put(`/api/shipping/`,payload);
+    return axiosPrivateInstance.put(`/api/shipping/${payload._id}`,payload);
 }
 const DeleteShippingDetailsByID = (id) => {
     return axiosPrivateInstance.delete(`/api/shipping/${id}`);

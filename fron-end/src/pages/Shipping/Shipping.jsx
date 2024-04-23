@@ -444,7 +444,7 @@ cartService.UpdateShippingDetailsByID(payload).then((response)=>{
                         shippingData={shippingDataForm}
                         isCart={false}
                         ScreenMode={ScreenMode}
-                        onCallback={()=>{}}
+                        onCallback={handleEditRequest}
                     />
                 )}
   

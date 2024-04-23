@@ -138,15 +138,15 @@ const ShippingDetailsFrom = ({ shippingData, handleInputFocus, onInputHandleChan
                     onChange={(event) => onInputHandleChange('phoneNumber', event.target.value)}
                 />
             </Grid>
-            {!(ScreenMode=== SCREEN_MODES.VIEW) &&(
+          
            <Grid item xs={12} md={12}>
          {!isCart && (<> <CustomButton text={cancelButtonTitle ? cancelButtonTitle : 'Cancel'} border='1px solid #ffe4d9' bgColor='#ff8884' onClick={() => onCallback(false)} />
-            <CustomButton text={confirmButtonTitle ? confirmButtonTitle : 'Confirm'} onClick={() => onCallback(true)}/>
+             {!(ScreenMode=== SCREEN_MODES.VIEW) &&  <CustomButton text={confirmButtonTitle ? confirmButtonTitle : 'Confirm'} onClick={() => onCallback(true)}/>}
             </>
          )
             }
-            </Grid>)
-            }
+            </Grid>
+            
         </Grid>
         </section>
     );
