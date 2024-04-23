@@ -10,6 +10,8 @@ import ShippingDetailsTable from '../../components/ShippingDetailsTable/Shipping
 import { sampleShippingData } from '../../utilities/data.constants';
 import { APP_TABLE_CONFIGS ,SCREEN_MODES} from '../../utilities/app.constants';
 import {validateFormData} from  "../../helper/index"
+import {cartService} from '../../services/Cart.Service'
+import { toast } from 'react-toastify';
 const Shipping = () => {
 
     const SHIPPING_FORM_INITIAL_STATE = {
@@ -18,9 +20,9 @@ const Shipping = () => {
         addressLine1: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
         addressLine2: { value: "", isRequired: false, disable: false, readonly: false, validator: "text", error: "", },
         city: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
-        postalCode: { value: "", isRequired: true, disable: false, readonly: false, validator: "number", error: "", },
+        postalCode: { value: 0, isRequired: true, disable: false, readonly: false, validator: "number", error: "", },
         country: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
-        phoneNumber: { value: "", isRequired: true, disable: false, readonly: false, validator: "number", error: "", },
+        phoneNumber: { value: 0, isRequired: true, disable: false, readonly: false, validator: "number", error: "", },
       };
       const INITIAL_SORT_META = {
         field: "",
@@ -31,12 +33,28 @@ const Shipping = () => {
       const [page, setPage] = useState(0)
       const [rowsPerPage, setRowsPerPage] = useState(APP_TABLE_CONFIGS.DEFAULT_ROWS_PER_PAGE)
       const [sortMeta, setSortMeta] = useState(INITIAL_SORT_META);
-      const [filteredList, setFilteredList] = useState(sampleShippingData)
+      const [filteredList, setFilteredList] = useState([])
       const [isFiltered, setIsFiltered] = useState(false)
       const [ScreenMode, setScreenMode] = useState('');
 
       const [helperText, setHelperText] = useState(true);
-  // Define handleInputFocus and onInputHandleChange functions
+ 
+useEffect(() => {
+  getShippingData()
+},[])
+
+
+   const getShippingData = async () => {
+   const userID ="66194666a02984b0db969e2f"
+   localStorage.getItem("userID")
+    cartService.GetAllShippingDetailsByUserID(userID).then((response)=>{
+      setFilteredList(response.data)
+    }).catch((error)=>{
+      console.log("error",error)
+    })
+   }   
+
+
   const handleInputFocus = (field, type) => {
     if (type === "GI")
     setShippingDataForm({
@@ -165,8 +183,9 @@ useEffect(() => {
   }
   if(activeTab===0){
     setScreenMode(SCREEN_MODES.CREATE)
+    setShippingDataForm(SHIPPING_FORM_INITIAL_STATE)
   }
-  if(activeTab===0){
+  if(activeTab===3){
     setScreenMode(SCREEN_MODES.VIEW)
   }
 },[activeTab])
@@ -179,6 +198,24 @@ const handleAction=(id,type)=>{
   }else if(type===SCREEN_MODES.VIEW){
     setActiveTab(3)
   }
+ 
+  if(type===SCREEN_MODES.VIEW||type===SCREEN_MODES.EDIT){
+    const _isDisable = type === SCREEN_MODES.VIEW
+    
+  }
+
+  if(type===SCREEN_MODES.DELETE){
+    console.log("delete",id)
+    cartService.DeleteShippingDetailsByID(id).then((response)=>{
+      console.log("response",response)
+      toast.success("Shipping Details Deleted Successfully")
+      getShippingData()
+    }).catch((error)=>{
+      console.log("error",error)
+      toast.error(error)
+    })
+  }
+
   console.log("first",id,type)
 
 }
@@ -258,18 +295,36 @@ const handleReportGeneration=()=>{
 
 const onClearFilter = () => {
   setIsFiltered(false)
-  setFilteredList(sampleShippingData)
+  getShippingData()
 }
 
 const onCallback=async (value)=>{
   if(value){
-
   const [validateData, isValid] = await validateFormData(shippingDataForm);
   setShippingDataForm(validateData);
-
-
+console.log("isValid",isValid)
   if(isValid){
-  setActiveTab(0);
+    
+   const payload={
+    userId: "66194666a02984b0db969e2f",
+    fullName: shippingDataForm.fullName.value,
+    email:shippingDataForm.email.value,
+    addressLine1: shippingDataForm.addressLine1.value,
+    addressLine2: shippingDataForm.addressLine2.value,
+    city: shippingDataForm.city.value,
+    postalCode: shippingDataForm.postalCode.value,
+    country: shippingDataForm.country.value,
+    phoneNumber: shippingDataForm.phoneNumber.value,
+}
+cartService.AddShippingDetailsByUserID(payload).then((response)=>{
+  console.log("response",response)
+  setShippingDataForm(SHIPPING_FORM_INITIAL_STATE)
+  setActiveTab(0)
+  getShippingData()
+  toast.success("Shipping Details Added Successfully")
+}).catch((error)=>{
+  toast.error(error)
+})
   }
 
 }else{
@@ -279,6 +334,7 @@ const onCallback=async (value)=>{
 }
 
 const handleEditRequest=async (value)=>{
+  console.log("first",value)
   if(value){
   const [validateData, isValid] = await validateFormData(shippingDataForm);
   setShippingDataForm(validateData);
