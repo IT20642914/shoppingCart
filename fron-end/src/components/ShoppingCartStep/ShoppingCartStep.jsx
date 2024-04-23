@@ -25,7 +25,7 @@ const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
   // Calculate shipping cost for an individual item
   const calculateIndividualShipping = (item) => {
     const itemTotalPrice = item.UnitPrice * item.Qty;
-    if (itemTotalPrice >= 50) {
+    if (itemTotalPrice >= 500) {
       return 0;
     }
     return itemTotalPrice * 0.1; // 10% shipping cost if the item total is below $50
@@ -70,7 +70,7 @@ const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
               </ListItemAvatar>
               <ListItemText
                 primary={item.ProductName}
-                secondary={`Price: $${item.UnitPrice.toFixed(2)} - Quantity: ${item.Qty}`}
+                secondary={`Price: Rs.${item.UnitPrice.toFixed(2)} - Quantity: ${item.Qty}`}
               />
             </ListItem>
           ))}
@@ -87,7 +87,7 @@ const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
           {cartItemList.map(item => (
             <Grid item xs={6} md={12} key={item._id}>
               <Typography>
-                {item.ProductName}:{calculateIndividualShipping(item) === 0 ? 'Free Shipping' : `$${calculateIndividualShipping(item)} Shipping`}
+                {item.ProductName}:{calculateIndividualShipping(item) === 0 ? 'Free Shipping' : `Rs.${calculateIndividualShipping(item)} Shipping`}
               </Typography>
             </Grid>
           ))}
@@ -103,15 +103,15 @@ const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
             <TableBody>
               <TableRow>
                 <TableCell>Subtotal:</TableCell>
-                <TableCell>${subtotal}</TableCell>
+                <TableCell>Rs.{subtotal}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Total Shipping Cost:</TableCell>
-                <TableCell>${totalShipping}</TableCell>
+                <TableCell>Rs.{totalShipping}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Estimated Total:</TableCell>
-                <TableCell>${estimatedTotal}</TableCell>
+                <TableCell>Rs.{estimatedTotal}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
