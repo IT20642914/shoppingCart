@@ -266,7 +266,6 @@ console.log("field",field,value)
 const payload={
   userId:userId,
   shippingId: selectedDetail._id}
-console.log("s",payload)
 
 try {
    const response=  await cartService.UpdateCartShippingIDByByUserId(payload)
