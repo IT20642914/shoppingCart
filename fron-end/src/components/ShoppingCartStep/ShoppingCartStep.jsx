@@ -7,6 +7,8 @@ import { TableContainer, Paper, Table, TableHead, TableCell,TableRow, TableBody,
 import {defaultImageUrl} from '../../assets/images'
 
 const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
+
+  console.log(cartItemList)
   const handleRemoveItem = (itemId) => {
     onUpdateCart(itemId, 0);
   };
@@ -25,7 +27,7 @@ const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
 
   // Calculate shipping cost for an individual item
   const calculateIndividualShipping = (item) => {
-    const itemTotalPrice = item.price * item.quantity;
+    const itemTotalPrice = item.UnitPrice * item.Qty;
     if (itemTotalPrice >= 50) {
       return 0;
     }
@@ -39,7 +41,7 @@ const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
 
   // Calculate the subtotal (price * quantity) for all items
   const calculateSubtotal = () => {
-    return cartItemList.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cartItemList.reduce((total, item) => total + item.UnitPrice.toFixed(2) * item.Qty, 0);
   };
 
   const subtotal = calculateSubtotal();
@@ -53,24 +55,25 @@ const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
       <p>Cart is Empty</p>
   ) : (
         <List>
+
           {cartItemList.map(item => (
-            <ListItem key={item.id} secondaryAction={
+            <ListItem key={item._id} secondaryAction={
               <>
-                <IconButton onClick={() => handleDecreaseQuantity(item.id, item.quantity)}>
+                <IconButton onClick={() => handleDecreaseQuantity(item._id, item.Qty)}>
                   <RemoveCircleOutlineIcon />
                 </IconButton>
-                <IconButton onClick={() => handleIncreaseQuantity(item.id, item.quantity)}>
+                <IconButton onClick={() => handleIncreaseQuantity(item._id, item.Qty)}>
                   <AddCircleOutlineIcon />
                 </IconButton>
-                <Button onClick={() => handleRemoveItem(item.id)}>Remove</Button>
+                <Button onClick={() => handleRemoveItem(item._id)}>Remove</Button>
               </>
             }>
               <ListItemAvatar>
-                <Avatar src={item.imageUrl||defaultImageUrl} alt={item.name} />
+                <Avatar src={item.imageUrl||defaultImageUrl} alt={item.ProductName} />
               </ListItemAvatar>
               <ListItemText
-                primary={item.name}
-                secondary={`Price: $${item.price.toFixed(2)} - Quantity: ${item.quantity}`}
+                primary={item.ProductName}
+                secondary={`Price: $${item.UnitPrice.toFixed(2)} - Quantity: ${item.Qty}`}
               />
             </ListItem>
           ))}
@@ -83,11 +86,11 @@ const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
     <Grid item xs={12} sm={12}>
       <div className={Style.detailedReport}>
         <Typography variant="h6" component="h2">Detailed Shipping Report</Typography>
-        <Grid container spacing={2}>
+        <Grid container spacing={4}>
           {cartItemList.map(item => (
-            <Grid item xs={6} md={12} key={item.id}>
+            <Grid item xs={6} md={12} key={item._id}>
               <Typography>
-                {item.name}:{calculateIndividualShipping(item) === 0 ? 'Free Shipping' : `$${calculateIndividualShipping(item).toFixed(2)} Shipping`}
+                {item.ProductName}:{calculateIndividualShipping(item) === 0 ? 'Free Shipping' : `$${calculateIndividualShipping(item)} Shipping`}
               </Typography>
             </Grid>
           ))}
@@ -103,15 +106,15 @@ const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
             <TableBody>
               <TableRow>
                 <TableCell>Subtotal:</TableCell>
-                <TableCell>${subtotal.toFixed(2)}</TableCell>
+                <TableCell>${subtotal}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Total Shipping Cost:</TableCell>
-                <TableCell>${totalShipping.toFixed(2)}</TableCell>
+                <TableCell>${totalShipping}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Estimated Total:</TableCell>
-                <TableCell>${estimatedTotal.toFixed(2)}</TableCell>
+                <TableCell>${estimatedTotal}</TableCell>
               </TableRow>
             </TableBody>
           </Table>

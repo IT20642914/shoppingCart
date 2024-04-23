@@ -16,6 +16,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel'
 import { Grid } from '@mui/material';
+import { cartService } from '../../services/Cart.Service';  
 const ShoppingCart = () => {
 
   const SHIPPING_FORM_INITIAL_STATE = {
@@ -33,12 +34,13 @@ const ShoppingCart = () => {
     field: "",
     asc: true,
   }
-  const [shippingData, setShippingData] = useState(SHIPPING_FORM_INITIAL_STATE);
+  const [shippingDataForm, setShippingDataForm] = useState(SHIPPING_FORM_INITIAL_STATE);
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState({});
-  const [cartItemList, setCartItemsList] = useState(cartItems);
+  const [cartItemList, setCartItemsList] = useState([]);
   const [allShippingDetails, setAllShippingDetails] = useState([]);
   const [selectedDetailId, setSelectedDetailId] = useState('');
+  const [helperText, setHelperText] = useState(true);
 
  // Fetching shipping data from the API
  useEffect(() => {
@@ -48,7 +50,19 @@ const ShoppingCart = () => {
 }, []);
 
  const fetchShippingData=async()=> {
-  setAllShippingDetails(sampleShippingData);
+  // need set user id from local storage
+  const userID ="66194666a02984b0db969e2f"
+  localStorage.getItem("userID")
+  try {
+    const shippingDetailsResponse = await cartService.GetAllShippingDetailsByUserID(userID);
+    setAllShippingDetails(shippingDetailsResponse.data);
+    const cartItemsResponse = await cartService.ViewAllCartItemsByUserID(userID);
+    setCartItemsList(cartItemsResponse.data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    // Optionally update state to show error to user
+  }
+
 }
 
   const handleNext = () => {
@@ -66,25 +80,115 @@ const ShoppingCart = () => {
 
   const onUpdateCart = (itemId, quantity) => {
     
-    const updatedCartItems = cartItemList.map(item => (item.id === itemId ? { ...item, quantity } : item));
+   // const updatedCartItems = cartItemList.map(item => (item._id === itemId ? { ...item, quantity } : item));
   
-    setCartItemsList(updatedCartItems);
+    //setCartItemsList(updatedCartItems);
   };
 
 
-  // Define handleInputFocus and onInputHandleChange functions
   const handleInputFocus = (field, type) => {
-    // Implement focus logic here
+    if (type === "GI")
+    setShippingDataForm({
+  ...shippingDataForm,
+  [field]: {
+    ...shippingDataForm,
+    error: null,
+  },
+});
+
   };
 
   const onInputHandleChange = (field, value) => {
-    // setShippingData({ ...filteredList, [field]: value });
+    setHelperText(true);
+console.log("field",field,value)
+    if(field==="email"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         email: {
+           ...shippingDataForm.email,
+           value: value,
+         },
+       });
+     }
+     if(field==="fullName"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         fullName: {
+           ...shippingDataForm.fullName,
+           value: value,
+         },
+       });
+     }
+     if(field==="addressLine1"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         addressLine1: {
+           ...shippingDataForm.addressLine1,
+           value: value,
+         },
+       });
+     }
+     if(field==="addressLine2"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         addressLine2: {
+           ...shippingDataForm.addressLine2,
+           value: value,
+         },
+       });
+     }
+     if(field==="city"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         city: {
+           ...shippingDataForm.city,
+           value: value,
+         },
+       });
+     }
+     if(field==="postalCode"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         postalCode: {
+           ...shippingDataForm.postalCode,
+           value: value,
+         },
+       });
+     }
+     if(field==="country"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         country: {
+           ...shippingDataForm.country,
+           value: value,
+         },
+       });
+     }
+     if(field==="phoneNumber"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         phoneNumber: {
+           ...shippingDataForm.phoneNumber,
+           value: value,
+         },
+       });
+     }
+     if(field==="email"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         email: {
+           ...shippingDataForm.email,
+           value: value,
+         },
+       });
+     }
+     
 }
 
 
   const steps = [
     { label: 'Shopping Cart', component: <ShoppingCartStep cartItemList={cartItemList} onUpdateCart={onUpdateCart} /> },
-    { label: 'Shipping Info', component: <ShippingDetailsFrom shippingData={shippingData} isCart={true}onInputHandleChange={onInputHandleChange} handleInputFocus={handleInputFocus} /> },
+    { label: 'Shipping Info', component: <ShippingDetailsFrom shippingData={shippingDataForm} isCart={true}onInputHandleChange={onInputHandleChange} handleInputFocus={handleInputFocus} /> },
     { label: 'Payment Details', component: <PaymentDetailsStep /> },
   ];
 
@@ -99,7 +203,7 @@ const ShoppingCart = () => {
 
 
   const setShippingDataFromDetail  = (detail) => {
-    setShippingData({
+    setShippingDataForm({
       ...SHIPPING_FORM_INITIAL_STATE,
       fullName: { ...SHIPPING_FORM_INITIAL_STATE.fullName, value: detail.fullName },
       email: { ...SHIPPING_FORM_INITIAL_STATE.email, value: detail.email },

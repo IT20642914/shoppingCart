@@ -19,12 +19,20 @@ const DeleteShippingDetailsByID = (id) => {
     return axiosPrivateInstance.delete(`/api/shipping/${id}`);
 
 }
-
 const GetShippingDetailByID=(id)=>{
     return axiosPrivateInstance.get(`api/shipping/single/${id}`);
 }
 
 
+const CartIncrementByUseIDAndShippingID = (payload) => {
+    return axiosPrivateInstance.post(`/api/cart/increment`, payload);
+
+}
+
+
+const ViewAllCartItemsByUserID = (id) => {
+    return axiosPrivateInstance.get(`api/cart/?userID=${id}`);
+}
 
 
 
@@ -34,5 +42,6 @@ export const cartService = {
     AddShippingDetailsByUserID,
     UpdateShippingDetailsByID,
     DeleteShippingDetailsByID,
-    GetShippingDetailByID
+    GetShippingDetailByID,
+    ViewAllCartItemsByUserID
 }
