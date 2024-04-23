@@ -6,6 +6,7 @@ export const validateFormData = async (data) => {
 
   return new Promise((resolve) => {
     for (const [field, fieldData] of Object.entries(data)) {
+        console.log("fieldData.validator",fieldData.validator,field)
       if (fieldData.validator === 'text') {
         let error = null;
         if (fieldData.isRequired && !fieldData.value) {

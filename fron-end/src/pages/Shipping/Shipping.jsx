@@ -62,7 +62,7 @@ useEffect(() => {
     setShippingDataForm({
   ...shippingDataForm,
   [field]: {
-    ...shippingDataForm,
+    ...shippingDataForm[field],
     error: null,
   },
 });
@@ -71,7 +71,6 @@ useEffect(() => {
 
   const onInputHandleChange = (field, value) => {
     setHelperText(true);
-console.log("field",field,value)
     if(field==="email"){
       setShippingDataForm({
          ...shippingDataForm,
@@ -144,15 +143,7 @@ console.log("field",field,value)
          },
        });
      }
-     if(field==="email"){
-      setShippingDataForm({
-         ...shippingDataForm,
-         email: {
-           ...shippingDataForm.email,
-           value: value,
-         },
-       });
-     }
+
      
 }
 const handleTabChange = (event, newValue) => {
@@ -432,11 +423,11 @@ const onCallback=async (value)=>{
   const [validateData, isValid] = await validateFormData(shippingDataForm);
   setShippingDataForm(validateData);
 console.log("isValid",isValid)
+  const userId=localStorage.getItem("userId")
   if(isValid){
     
    const payload={
-   
-    userId: "66194666a02984b0db969e2f",
+    userId: userId,
     fullName: shippingDataForm.fullName.value,
     email:shippingDataForm.email.value,
     addressLine1: shippingDataForm.addressLine1.value,
@@ -468,7 +459,7 @@ const handleEditRequest=async (value)=>{
   const [validateData, isValid] = await validateFormData(shippingDataForm);
   setShippingDataForm(validateData);
 
-  if(isValid) {
+if(isValid) {
   
 const payload={
   _id:shippingDataForm._id.value,
