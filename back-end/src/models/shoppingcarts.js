@@ -30,9 +30,10 @@ const cartSchema = new Schema({
         type: Number,
         required: true
     },
-    DelivryAdddress:{
+    ShippingId:{
         type: String,
-        required: true
+        required: false,
+        defaultValue:null
     }
 }, {
     timestamps: true
