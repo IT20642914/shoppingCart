@@ -4,6 +4,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Style from './ShoppingCartStep.module.scss';
 import { TableContainer, Paper, Table, TableHead, TableCell,TableRow, TableBody, Tooltip,TablePagination} from '@mui/material';
+import {defaultImageUrl} from '../../assets/images'
 
 const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
   const handleRemoveItem = (itemId) => {
@@ -28,7 +29,7 @@ const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
     if (itemTotalPrice >= 50) {
       return 0;
     }
-    return itemTotalPrice * 0.02; // 2% shipping cost if the item total is below $50
+    return itemTotalPrice * 0.1; // 10% shipping cost if the item total is below $50
   };
 
   // Calculate the total shipping cost for all items
@@ -49,7 +50,7 @@ const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
     <section className={Style.shoppingStepContainer}>
       <section className={Style.Section1}>
       {cartItemList.length === 0 ? (
-    <p>Cart is Empty</p>
+      <p>Cart is Empty</p>
   ) : (
         <List>
           {cartItemList.map(item => (
@@ -65,7 +66,7 @@ const ShoppingCartStep = ({ cartItemList, onUpdateCart }) => {
               </>
             }>
               <ListItemAvatar>
-                <Avatar src={item.imageUrl} alt={item.name} />
+                <Avatar src={item.imageUrl||defaultImageUrl} alt={item.name} />
               </ListItemAvatar>
               <ListItemText
                 primary={item.name}

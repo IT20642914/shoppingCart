@@ -1,18 +1,18 @@
 import React from 'react';
 import { Card, CardContent, CardMedia, Typography, Rating, Button } from '@mui/material';
 import {defaultImageUrl} from '../../assets/images'
-const ProductCard = ({ id, name, price, imageUrl, rating, onCardClick, handleAddToCart }) => {
+const ProductCard = ({ _id, product_name, value, imageUrl, averageRating,Quantity, onCardClick, handleAddToCart }) => {
   return (
     <Card sx={{
       maxWidth: 345, width: '100%', cursor: 'pointer',
       background: "rgba(255, 255, 255, 0.2)",
       border: "1px solid rgba(255, 255, 255, 0.5)",
       borderRadius: "16px",
-    }} onClick={() => onCardClick(id)}>
+    }} onClick={() => onCardClick(_id)}>
       <CardMedia
         component="img"
         image={imageUrl||defaultImageUrl}
-        alt={name}
+        alt={product_name}
         sx={{
           minWidth: 345,
           maxHeight: 145,
@@ -22,18 +22,21 @@ const ProductCard = ({ id, name, price, imageUrl, rating, onCardClick, handleAdd
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {name}
+          {product_name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {price}
+          Price-{value}
         </Typography>
-        <Rating value={rating} readOnly />
+        <Typography variant="body2" color="text.secondary">
+         Quantity-{Quantity}
+        </Typography>
+        <Rating value={averageRating} readOnly />
         <Button
           variant="contained"
           color="primary"
           onClick={(e) => {
             e.stopPropagation(); // Prevents the onCardClick from being triggered when the button is clicked
-            handleAddToCart(id);
+            handleAddToCart(_id);
           }}
           sx={{ marginTop: 2,width:"10rem" }} // Adds some space above the button
         >

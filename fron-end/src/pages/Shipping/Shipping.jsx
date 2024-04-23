@@ -258,6 +258,7 @@ const handleReportGeneration=()=>{
 
 const onClearFilter = () => {
   setIsFiltered(false)
+  setFilteredList(sampleShippingData)
 }
 
 const onCallback=async (value)=>{

@@ -19,19 +19,19 @@ import { Grid } from '@mui/material';
 const ShoppingCart = () => {
 
   const SHIPPING_FORM_INITIAL_STATE = {
-     _id:{ value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
-    fullName: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
-    email: { value: "", isRequired: true, disable: false, readonly: false, validator: "email", error: "", },
-    addressLine1: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
-    addressLine2: { value: "", isRequired: false, disable: false, readonly: false, validator: "text", error: "", },
-    city: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
-    postalCode: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
-    country: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
-    phoneNumber: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
+     _id:{ value: "", isRequired: true, disable: false, readonly: true, validator: "text", error: "", },
+    fullName: { value: "", isRequired: true, disable: true, readonly: true, validator: "text", error: "", },
+    email: { value: "", isRequired: true, disable: true, readonly: true, validator: "email", error: "", },
+    addressLine1: { value: "", isRequired: true, disable: true, readonly: true, validator: "text", error: "", },
+    addressLine2: { value: "", isRequired: false, disable: true, readonly: true, validator: "text", error: "", },
+    city: { value: "", isRequired: true, disable: true, readonly: true, validator: "text", error: "", },
+    postalCode: { value: "", isRequired: true, disable: true, readonly: true, validator: "text", error: "", },
+    country: { value: "", isRequired: true, disable: true, readonly: true, validator: "text", error: "", },
+    phoneNumber: { value: "", isRequired: true, disable: true, readonly: true, validator: "text", error: "", },
   };
   const INITIAL_SORT_META = {
     field: "",
-    asc: false,
+    asc: true,
   }
   const [shippingData, setShippingData] = useState(SHIPPING_FORM_INITIAL_STATE);
   const [activeStep, setActiveStep] = useState(0);

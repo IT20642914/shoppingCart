@@ -1,6 +1,7 @@
 // Define your products data
 
 import {productImage1,productImage3,productImage2,productImage4,productImage5} from '../assets/images/index'
+
 export const products = [
     { id: 1, name: 'Milk Toffee', price: 'LKR520.00', imageUrl: null, rating: 3.9  },
     { id: 2, name: 'Chocolate Cake', price: 'LKR1020.00', imageUrl: productImage3 , rating: 3.9 },
@@ -46,7 +47,7 @@ export const products = [
       name: 'Wireless Mouse',
       price: 19.99,
       quantity: 2,
-      imageUrl: productImage3
+      imageUrl: null
     },
     {
       id: 'p2',
