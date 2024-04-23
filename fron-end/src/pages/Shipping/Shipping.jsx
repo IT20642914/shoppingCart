@@ -12,9 +12,12 @@ import { APP_TABLE_CONFIGS ,SCREEN_MODES} from '../../utilities/app.constants';
 import {validateFormData} from  "../../helper/index"
 import {cartService} from '../../services/Cart.Service'
 import { toast } from 'react-toastify';
+import { Page, Text, View, Document, StyleSheet, pdf,Image  } from '@react-pdf/renderer';
+import {logo} from '../../assets/images'
 const Shipping = () => {
 
     const SHIPPING_FORM_INITIAL_STATE = {
+        _id:{ value: "", isRequired: false, disable: false, readonly: true, validator: "text", error: "", },
         fullName: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
         email: { value: "", isRequired: true, disable: false, readonly: false, validator: "email", error: "", },
         addressLine1: { value: "", isRequired: true, disable: false, readonly: false, validator: "text", error: "", },
@@ -45,8 +48,7 @@ useEffect(() => {
 
 
    const getShippingData = async () => {
-   const userID ="66194666a02984b0db969e2f"
-   localStorage.getItem("userID")
+   const userID =localStorage.getItem("userId")
     cartService.GetAllShippingDetailsByUserID(userID).then((response)=>{
       setFilteredList(response.data)
     }).catch((error)=>{
@@ -60,7 +62,7 @@ useEffect(() => {
     setShippingDataForm({
   ...shippingDataForm,
   [field]: {
-    ...shippingDataForm,
+    ...shippingDataForm[field],
     error: null,
   },
 });
@@ -69,7 +71,6 @@ useEffect(() => {
 
   const onInputHandleChange = (field, value) => {
     setHelperText(true);
-console.log("field",field,value)
     if(field==="email"){
       setShippingDataForm({
          ...shippingDataForm,
@@ -142,15 +143,7 @@ console.log("field",field,value)
          },
        });
      }
-     if(field==="email"){
-      setShippingDataForm({
-         ...shippingDataForm,
-         email: {
-           ...shippingDataForm.email,
-           value: value,
-         },
-       });
-     }
+
      
 }
 const handleTabChange = (event, newValue) => {
@@ -201,7 +194,23 @@ const handleAction=(id,type)=>{
  
   if(type===SCREEN_MODES.VIEW||type===SCREEN_MODES.EDIT){
     const _isDisable = type === SCREEN_MODES.VIEW
-    
+cartService.GetShippingDetailByID(id).then((response)=>{
+
+  const data = response.data[0]
+  console.log("data",data)
+  setShippingDataForm({
+    _id:{ value:data._id, isRequired: false, disable: false, readonly: true, validator: "text", error: "", },
+    fullName: { value: data.fullName, isRequired: true, disable: _isDisable, readonly: _isDisable, validator: "text", error: "", },
+    addressLine1: { value: data.addressLine1, isRequired: true, disable: _isDisable, readonly: _isDisable, validator: "text", error: "", },
+    addressLine2: { value: data.addressLine2, isRequired: false, disable: _isDisable, readonly: _isDisable, validator: "text", error: "", },
+    city: { value: data.city, isRequired: true, disable: _isDisable, readonly: _isDisable, validator: "text", error: "", },
+    postalCode: { value: data.postalCode, isRequired: true, disable: _isDisable, readonly: _isDisable, validator: "number", error: "", },
+    country: { value: data.country, isRequired: true, disable: _isDisable, readonly: _isDisable, validator: "text", error: "", },
+    email: { value: data.email, isRequired: true, disable: _isDisable, readonly: _isDisable, validator: "email", error: "", },
+    phoneNumber: { value: data.phoneNumber, isRequired: true, disable: _isDisable, readonly: _isDisable, validator: "number", error: "", },
+})}).catch((error)=>{
+  toast.error(error)
+})
   }
 
   if(type===SCREEN_MODES.DELETE){
@@ -287,9 +296,120 @@ const getFilterList = (col) => {
           .filter((value, index, array) => array.indexOf(value) === index);
   } else return [];
 };
+const styles = StyleSheet.create({
+  page: {
+    backgroundColor: '#db9b99',
+    flexDirection: 'column',
+    padding: 10,
+  },
+  title: {
+    color:'#4a033d',
+    fontSize: 20,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  table: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 5,
+    borderWidth: 1,
+    borderColor: '#000',
+    marginBottom: 20,
+  },
+  row: {
+    flexDirection: 'row',
+    borderTop: '1 solid black',
+    paddingVertical: 4,
+  },
+  header: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    backgroundColor: '#a45a70',
+    padding: 5,
+    textAlign: 'center',
+    flex: 1, // Equal width for all header cells
+  },
+  cell: {
+    backgroundColor:"#ff8884",
+    fontSize: 12,
+    padding: 5,
+    borderRightWidth: 1,
+    textAlign: 'left',
+    overflowWrap: 'break-word', // Allow text to wrap within the cell
+    flex: 1, // Equal width for all data cells
+  },
+});
+
+const ShoppingCartPDF = ({ data }) => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <Image src={logo} style={{ width: 60, height: 60, alignSelf: 'center' }} />
+      <Text style={styles.title}>Shopping Cart and Shipping Details</Text>
+
+      {/* Product Details Table */}
+      <Text style={styles.title}>Product Details In Shopping Cart</Text>
+      <View style={styles.table}>
+        <View style={styles.row}>
+          <Text style={styles.header}>Product Name</Text>
+          <Text style={styles.header}>Qty</Text>
+          <Text style={styles.header}>Unit Price</Text>
+          <Text style={styles.header}>Total Price</Text>
+        </View>
+        {data.map((item, index) => (
+          <View key={index} style={styles.row}>
+            <Text style={styles.cell}>{item.ProductName}</Text>
+            <Text style={styles.cell}>{item.Qty}</Text>
+            <Text style={styles.cell}>${item.UnitPrice.toFixed(2)}</Text>
+            <Text style={styles.cell}>${item.TotalPrice.toFixed(2)}</Text>
+          </View>
+        ))}
+      </View>
+
+      {/* Shipping Details Table */}
+      <Text style={styles.title}>Shipping Details for Each Product</Text>
+      <View style={styles.table}>
+        <View style={styles.row}>
+          <Text style={styles.header}>Full Name</Text>
+          <Text style={styles.header}>Email</Text>
+          <Text style={styles.header}>Address</Text>
+          <Text style={styles.header}>City</Text>
+          <Text style={styles.header}>Postal Code</Text>
+          <Text style={styles.header}>Country</Text>
+          <Text style={styles.header}>Phone</Text>
+        </View>
+        {data.map((item, index) => (
+          <View key={index} style={styles.row}>
+            <Text style={styles.cell}>{item.shippingInfo.fullName}</Text>
+            <Text style={styles.cell}>{item.shippingInfo.email}</Text>
+            <Text style={styles.cell}>{item.shippingInfo.addressLine1} {item.shippingInfo.addressLine2}</Text>
+            <Text style={styles.cell}>{item.shippingInfo.city}</Text>
+            <Text style={styles.cell}>{item.shippingInfo.postalCode}</Text>
+            <Text style={styles.cell}>{item.shippingInfo.country}</Text>
+            <Text style={styles.cell}>{item.shippingInfo.phoneNumber}</Text>
+          </View>
+        ))}
+      </View>
+    </Page>
+  </Document>
+);
+
 
 const handleReportGeneration=()=>{
   console.log("report")
+  const userId=localStorage.getItem("userId")
+  cartService.getReport(userId).then(async (response)=>{
+    const data=response.data
+    const blob = await pdf(<ShoppingCartPDF data={data} />).toBlob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'ManagerReport.pdf');
+    document.body.appendChild(link);
+    link.click();
+    toast.success("Report Generated Successfully")
+   }).catch((error)=>{
+    toast.error("Error Generating Report")
+    console.log("error",error)})  
 
 }
 
@@ -303,10 +423,11 @@ const onCallback=async (value)=>{
   const [validateData, isValid] = await validateFormData(shippingDataForm);
   setShippingDataForm(validateData);
 console.log("isValid",isValid)
+  const userId=localStorage.getItem("userId")
   if(isValid){
     
    const payload={
-    userId: "66194666a02984b0db969e2f",
+    userId: userId,
     fullName: shippingDataForm.fullName.value,
     email:shippingDataForm.email.value,
     addressLine1: shippingDataForm.addressLine1.value,
@@ -334,13 +455,34 @@ cartService.AddShippingDetailsByUserID(payload).then((response)=>{
 }
 
 const handleEditRequest=async (value)=>{
-  console.log("first",value)
   if(value){
   const [validateData, isValid] = await validateFormData(shippingDataForm);
   setShippingDataForm(validateData);
 
-  if(isValid) {
-    setActiveTab(0)
+if(isValid) {
+  
+const payload={
+  _id:shippingDataForm._id.value,
+  fullName: shippingDataForm.fullName.value,
+  email:shippingDataForm.email.value,
+  addressLine1: shippingDataForm.addressLine1.value,
+  addressLine2: shippingDataForm.addressLine2.value,
+  city: shippingDataForm.city.value,
+  postalCode: shippingDataForm.postalCode.value,
+  country: shippingDataForm.country.value,
+  phoneNumber: shippingDataForm.phoneNumber.value,
+}
+console.log(payload)
+cartService.UpdateShippingDetailsByID(payload).then((response)=>{
+  toast.success("Shipping Details Updated Successfully")
+  getShippingData()
+  setShippingDataForm(SHIPPING_FORM_INITIAL_STATE)
+  setActiveTab(0);
+  
+}).catch((error)=>{
+  toast.error(error)
+})
+
     }
 }else{
   setShippingDataForm(SHIPPING_FORM_INITIAL_STATE);
@@ -353,9 +495,10 @@ const handleEditRequest=async (value)=>{
     <div className={Styles.formWrapper}>
 
     <Tabs value={activeTab} onChange={handleTabChange}>
-                <Tab label="Shipping Details List" />
-                <Tab label="Add Shipping" />
-             { ScreenMode&&ScreenMode===SCREEN_MODES.EDIT&&  <Tab label="MAnage Shipping" />}
+                <Tab label="Shipping Details List" value={0} />
+                <Tab label="Add Shipping" value={1} />
+             {(ScreenMode===SCREEN_MODES.EDIT)&&  <Tab label="Manage Shipping" value={2} />}
+             {(ScreenMode===SCREEN_MODES.VIEW)&&  <Tab label="View Shipping" value={3} />}
             </Tabs>
             <div className={Styles.tabContent}>
                 {activeTab === 0 && <ShippingDetailsTable
@@ -383,6 +526,7 @@ const handleEditRequest=async (value)=>{
                         shippingData={shippingDataForm}
                         onCallback={onCallback}
                         isCart={false}
+                        ScreenMode={ScreenMode}
                     />
                 )}
                     {activeTab === 2 && (
@@ -392,6 +536,7 @@ const handleEditRequest=async (value)=>{
                         shippingData={shippingDataForm}
                         helperText={helperText}
                         isCart={false}
+                        ScreenMode={ScreenMode}
                         onCallback={handleEditRequest}
                     />
                 )}
@@ -401,6 +546,7 @@ const handleEditRequest=async (value)=>{
                         onInputHandleChange={onInputHandleChange}
                         shippingData={shippingDataForm}
                         isCart={false}
+                        ScreenMode={ScreenMode}
                         onCallback={handleEditRequest}
                     />
                 )}

@@ -1,7 +1,8 @@
 import ShoppingCart from '../models/shoppingcarts.js';
 import Products from '../models/produts.js';
 import Feedback from '../models/feedback.js';
-
+import ShippingDetails from '../models/shippingDetails.js'
+import mongoose from 'mongoose';
 
 // Controller for getting all shopping carts for a specific customer
 export const getShoppingCartsItems = async (req, res) => {
@@ -93,10 +94,24 @@ export const getAllFeedbacksAndAverageRatings = async (req, res) => {
 
 // Controller for creating a new shopping cart item
 export const createShoppingCart = async (req, res) => {
+  const { userId, ProductId } = req.body;
+
   try {
-    const shoppingCart = new ShoppingCart(req.body);
-    const savedShoppingCart = await shoppingCart.save();
-    res.status(201).json(savedShoppingCart);
+    // Check if a cart item with the same userId and ProductId already exists
+    const existingCartItem = await ShoppingCart.findOne({ userId, ProductId });
+
+    if (existingCartItem) {
+      // If item exists, increase Qty by 1
+      existingCartItem.Qty += 1;
+      existingCartItem.TotalPrice = existingCartItem.UnitPrice * existingCartItem.Qty;  // Update TotalPrice based on new Qty
+      const updatedCartItem = await existingCartItem.save();
+      res.status(200).json(updatedCartItem);
+    } else {
+      // If no existing item, create a new cart item
+      const shoppingCart = new ShoppingCart(req.body);
+      const savedShoppingCart = await shoppingCart.save();
+      res.status(201).json(savedShoppingCart);
+    }
   } catch (error) {
     res.status(400).json({ error: true, message: error.message });
   }
@@ -196,5 +211,55 @@ export const getShoppingCartDetails = async (req, res) => {
     res.status(200).json(shoppingCart);
   } catch (error) {
     res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+};
+
+
+export const updateUserCartShipping = async (req, res) => {
+  const { userId } = req.params;
+  const { shippingId } = req.body;
+
+  try {
+    // Update all cart items with the specified userId to the new ShippingId
+    const updatedCartItems = await ShoppingCart.updateMany(
+      { $match: { userId: mongoose.Types.ObjectId(userId) } }, // Filter to match only items belonging to the specified user
+      { $set: { ShippingId: shippingId } } // Update action
+    );
+
+    if (updatedCartItems.matchedCount === 0) {
+      res.status(404).send('No cart items found for this user');
+    } else {
+      res.status(200).json({
+        message: "Cart items updated successfully",
+        details: updatedCartItems
+      });
+    }
+  } catch (error) {
+    res.status(400).json({ error: true, message: error.message });
+  }
+};
+
+export const generateUserReport = async (req, res) => {
+  const { userId } = req.params; // Assuming you're getting userId from route params
+
+  try {
+      const cartItems = await ShoppingCart.find({ userId: userId });
+      if (cartItems.length === 0) {
+          return res.status(404).json({ message: "No cart items found for this user" });
+      }
+
+      // Fetch shipping details for each cart item
+      const detailedCartItems = await Promise.all(cartItems.map(async (item) => {
+          const shippingInfo = await ShippingDetails.findById(item.ShippingId);
+          return {
+              ...item.toObject(), // Convert MongoDB document to a plain JavaScript object
+              shippingInfo
+          };
+      }));
+
+      res.json(detailedCartItems);
+  } catch (error) {
+      console.error('Error retrieving cart items and shipping details:', error);
+      res.status(500).json({ message: "Internal Server Error" });
   }
 };

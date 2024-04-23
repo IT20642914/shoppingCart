@@ -31,3 +31,9 @@ export const SCREEN_MODES = {
   DELETE: "DELETE",
 };
 
+export const CART_ACTIONS = {
+  ADD: "ADD",
+  REMOVE: "REMOVE",
+  INCREASE: "INCREASE",
+  DECREASE: "DECREASE",
+}

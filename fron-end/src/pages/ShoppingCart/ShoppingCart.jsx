@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import ShoppingCartStep from '../../components/ShoppingCartStep/ShoppingCartStep';
 import PaymentDetailsStep from '../../components/PaymentDetails/PaymentDetails';
 import Styles from './ShoppingCart.module.scss';
-import { cartItems } from '../../utilities/index';
+import { CART_ACTIONS, cartItems } from '../../utilities/index';
 import ShippingDetailsFrom from '../../components/ShippingDetailsFrom/ShippingDetailsFrom';
 import { sampleShippingData } from '../../utilities/data.constants';
 import Radio from '@mui/material/Radio';
@@ -16,6 +16,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel'
 import { Grid } from '@mui/material';
+import { cartService } from '../../services/Cart.Service';  
+import { toast } from 'react-toastify';
 const ShoppingCart = () => {
 
   const SHIPPING_FORM_INITIAL_STATE = {
@@ -33,12 +35,13 @@ const ShoppingCart = () => {
     field: "",
     asc: true,
   }
-  const [shippingData, setShippingData] = useState(SHIPPING_FORM_INITIAL_STATE);
+  const [shippingDataForm, setShippingDataForm] = useState(SHIPPING_FORM_INITIAL_STATE);
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState({});
-  const [cartItemList, setCartItemsList] = useState(cartItems);
+  const [cartItemList, setCartItemsList] = useState([]);
   const [allShippingDetails, setAllShippingDetails] = useState([]);
   const [selectedDetailId, setSelectedDetailId] = useState('');
+  const [helperText, setHelperText] = useState(true);
 
  // Fetching shipping data from the API
  useEffect(() => {
@@ -48,7 +51,19 @@ const ShoppingCart = () => {
 }, []);
 
  const fetchShippingData=async()=> {
-  setAllShippingDetails(sampleShippingData);
+  // need set user id from local storage
+  const userID ="66194666a02984b0db969e2f"
+  localStorage.getItem("userID")
+  try {
+    const shippingDetailsResponse = await cartService.GetAllShippingDetailsByUserID(userID);
+    setAllShippingDetails(shippingDetailsResponse.data);
+    const cartItemsResponse = await cartService.ViewAllCartItemsByUserID(userID);
+    setCartItemsList(cartItemsResponse.data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    // Optionally update state to show error to user
+  }
+
 }
 
   const handleNext = () => {
@@ -64,27 +79,157 @@ const ShoppingCart = () => {
     setCompleted({});
   };
 
-  const onUpdateCart = (itemId, quantity) => {
+  const onUpdateCart = async (itemId, Item,mode) => {
+    if(mode ===CART_ACTIONS.REMOVE){
+
+      try {
+      const remove= await cartService.RemoveItemFromCart(itemId)
+      if(remove.status===200){
+        toast.success("Item Removed from Cart Successfully")
+        fetchShippingData() 
+      }
+    }catch (error) {
+        toast.error("Error in Removing from Cart Item")
+        console.error('Error fetching data:', error);
+      }
+      
+    }
+
+    if(mode===CART_ACTIONS.INCREASE){
+      console.log("mode",mode,CART_ACTIONS.INCREASE)
+      try {
+        console.log("first",Item)
+        const increase= await cartService.CartIncrementByUseID(Item)
+        if(increase.status===200){
+          toast.success("Item Increased in Cart Successfully")
+          fetchShippingData() 
+        }
+      }catch (error) {
+      console.error('Error fetching data:', error);
+      toast.error("Error in Increasing Cart Item")
+      }
     
-    const updatedCartItems = cartItemList.map(item => (item.id === itemId ? { ...item, quantity } : item));
-  
-    setCartItemsList(updatedCartItems);
+    }
+    
+    if(mode===CART_ACTIONS.DECREASE){
+      try {
+        console.log("first",Item)
+        const increase= await cartService.CartDecrementByUseID(Item)
+        if(increase.status===200){
+          toast.success("Item Decreasing in Cart Successfully")
+          fetchShippingData() 
+        }
+      }catch (error) {
+      console.error('Error fetching data:', error);
+      toast.error("Error in Decreasing Cart Item")
+      }
+    }
   };
 
 
-  // Define handleInputFocus and onInputHandleChange functions
   const handleInputFocus = (field, type) => {
-    // Implement focus logic here
+    if (type === "GI")
+    setShippingDataForm({
+  ...shippingDataForm,
+  [field]: {
+    ...shippingDataForm,
+    error: null,
+  },
+});
+
   };
 
   const onInputHandleChange = (field, value) => {
-    // setShippingData({ ...filteredList, [field]: value });
+    setHelperText(true);
+console.log("field",field,value)
+    if(field==="email"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         email: {
+           ...shippingDataForm.email,
+           value: value,
+         },
+       });
+     }
+     if(field==="fullName"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         fullName: {
+           ...shippingDataForm.fullName,
+           value: value,
+         },
+       });
+     }
+     if(field==="addressLine1"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         addressLine1: {
+           ...shippingDataForm.addressLine1,
+           value: value,
+         },
+       });
+     }
+     if(field==="addressLine2"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         addressLine2: {
+           ...shippingDataForm.addressLine2,
+           value: value,
+         },
+       });
+     }
+     if(field==="city"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         city: {
+           ...shippingDataForm.city,
+           value: value,
+         },
+       });
+     }
+     if(field==="postalCode"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         postalCode: {
+           ...shippingDataForm.postalCode,
+           value: value,
+         },
+       });
+     }
+     if(field==="country"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         country: {
+           ...shippingDataForm.country,
+           value: value,
+         },
+       });
+     }
+     if(field==="phoneNumber"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         phoneNumber: {
+           ...shippingDataForm.phoneNumber,
+           value: value,
+         },
+       });
+     }
+     if(field==="email"){
+      setShippingDataForm({
+         ...shippingDataForm,
+         email: {
+           ...shippingDataForm.email,
+           value: value,
+         },
+       });
+     }
+     
 }
 
 
   const steps = [
     { label: 'Shopping Cart', component: <ShoppingCartStep cartItemList={cartItemList} onUpdateCart={onUpdateCart} /> },
-    { label: 'Shipping Info', component: <ShippingDetailsFrom shippingData={shippingData} isCart={true}onInputHandleChange={onInputHandleChange} handleInputFocus={handleInputFocus} /> },
+    { label: 'Shipping Info', component: <ShippingDetailsFrom shippingData={shippingDataForm} isCart={true}onInputHandleChange={onInputHandleChange} handleInputFocus={handleInputFocus} /> },
     { label: 'Payment Details', component: <PaymentDetailsStep /> },
   ];
 
@@ -99,7 +244,7 @@ const ShoppingCart = () => {
 
 
   const setShippingDataFromDetail  = (detail) => {
-    setShippingData({
+    setShippingDataForm({
       ...SHIPPING_FORM_INITIAL_STATE,
       fullName: { ...SHIPPING_FORM_INITIAL_STATE.fullName, value: detail.fullName },
       email: { ...SHIPPING_FORM_INITIAL_STATE.email, value: detail.email },
@@ -112,12 +257,25 @@ const ShoppingCart = () => {
     });
   };
 
-  const handleRadioChange = (event) => {
+  const handleRadioChange = async (event) => {
 
-console.log(allShippingDetails,"allShippingDetails")
      const selectedDetail = allShippingDetails.find(detail => detail._id === event.target.value);
-   setSelectedDetailId(event.target.value);
+    setSelectedDetailId(event.target.value);
     setShippingDataFromDetail(selectedDetail);
+   const userId=localStorage.getItem("userId")
+const payload={
+  userId:userId,
+  shippingId: selectedDetail._id}
+console.log("s",payload)
+
+try {
+   const response=  await cartService.UpdateCartShippingIDByByUserId(payload)
+
+   response.status===200 && toast.success("Shipping Details Updated Successfully")
+} catch (error) {
+  
+}
+
   };
 
   return (

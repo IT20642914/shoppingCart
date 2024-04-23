@@ -138,11 +138,11 @@ export const StyledCheckBox = styled(Checkbox)(({ theme }) => ({
 export const StyledTextField = styled(TextField)(() => ({
   "& .MuiInputBase-root": {
    // backgroundColor: "#5CAD77",
-    color: "white",
+    color: "#4a033d",
     //borderColor: "#5CAD77",
   },
   "& .MuiInputLabel-root": {
-    color: "white",
+    color: "#4a033d",
     pointerEvents: "none",
   },
   "& .MuiInputLabel-root.Mui-required::after": {
