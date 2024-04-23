@@ -6,8 +6,6 @@ import logger from './utils/logger.js';
 import { connect } from './utils/database.connection.js';
 
 import authRoutes from "./routes/auth.js";
-import managerRoutes from "./routes/manager.js";
-import feedBackRoutes from "./routes/feedback.js";
 import cartRoutes from "./routes/cart.js";
 import shippingRoutes from "./routes/shipping.js";
 
@@ -28,8 +26,6 @@ app.listen(PORT, () => {
 });
 
 app.use("/api", authRoutes);
-app.use("/api/manager", managerRoutes);
-app.use("/api/feedback", feedBackRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/shipping", shippingRoutes);
 
