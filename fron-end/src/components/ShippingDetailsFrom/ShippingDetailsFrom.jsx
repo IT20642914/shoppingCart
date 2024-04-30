@@ -12,19 +12,26 @@ const ShippingDetailsFrom = ({ shippingData, handleInputFocus, onInputHandleChan
         <Grid container spacing={4}>
             {/* Full Name */}
             <Grid item xs={12} md={12} sx={{ marginTop: '1rem' }}>
-                <StyledTextField
-                    fullWidth
-                    label="Full Name"
-                    placeholder="Enter Full Name"
-                    size="small"
-                    value={fullName.value}
-                    error={!!fullName.error}
-                    disabled={fullName.disable}
-                    required={fullName.isRequired}
-                    helperText={helperText && fullName.error}
-                    onFocus={() => handleInputFocus('fullName', 'GI')}
-                    onChange={(event) => onInputHandleChange('fullName', event.target.value)}
-                />
+            <StyledTextField
+    fullWidth
+    label="Full Name"
+    placeholder="Enter Full Name"
+    size="small"
+    value={fullName.value}
+    error={!!fullName.error}
+    disabled={fullName.disable}
+    required={fullName.isRequired}
+    helperText={helperText && fullName.error}
+    onFocus={() => handleInputFocus('fullName', 'GI')}
+    onChange={(event) => {
+        const newValue = event.target.value;
+        const specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+        if (specialCharRegex.test(newValue)) {
+            return;
+        }
+        onInputHandleChange('fullName', newValue);
+    }}
+/>
             </Grid>
              {/*email */}
              <Grid item xs={12} md={12}>

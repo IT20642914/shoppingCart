@@ -13,6 +13,11 @@ export const validateFormData = async (data) => {
           error = 'This field is required.';
           isValid = false;
         } else if (fieldData.value) {
+          const specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+          if (specialCharRegex.test(fieldData.value)) {
+              error = 'Special characters are not allowed.';
+              isValid = false;
+          }
           if (fieldData.charLength !== undefined) {
             if (!fieldData.charLength.includes(fieldData.value.length)) {
               error = `Character length should be one of: ${fieldData.charLength.join(', ')}.`;
